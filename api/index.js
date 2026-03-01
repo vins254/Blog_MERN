@@ -1,4 +1,4 @@
-//require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -27,7 +27,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 async function connectDB() { 
     try{
-        await mongoose.connect('mongodb+srv://blog-user:KExS2OEuH6UVAJlb@cluster0.ztz1e3b.mongodb.net/?appName=Cluster0');
+        await mongoose.connect(process.env.MONGO_URL);
         console.log("MongoDB connected");
     } catch(error) {
         console.error("MongoDB connection error", error);
