@@ -37,6 +37,9 @@ async function connectDB() {
 connectDB();
 
 
+app.get("/", (req, res) => {
+  res.send("MERN Blog API is running");
+});
 
 
 app.post('/register', async(req,res) => {
