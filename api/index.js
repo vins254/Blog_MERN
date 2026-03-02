@@ -19,7 +19,7 @@ const secret = process.env.JWT_SECRET;
 
 app.use(cors({
     credentials:true,
-    origin:"https://blog-mern-git-main-vincents-projects-2517ba4a.vercel.app",
+    origin:"https://blog-mern-roan.vercel.app",
 }));
 
 app.use(express.json());
