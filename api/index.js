@@ -15,11 +15,11 @@ const PORT = process.env.PORT || 4000;
 
 
 const salt = bcrypt.genSaltSync(10);
-const secret = 'iqwefVDedh6230Twd9328Gued78';
+const secret = process.env.JWT_SECRET;
 
 app.use(cors({
     credentials:true,
-    origin:"https://blog-mern-jgh8.onrender.com",
+    origin:"https://blog-mern-git-main-vincents-projects-2517ba4a.vercel.app/",
 }));
 
 app.use(express.json());
