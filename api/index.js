@@ -19,7 +19,7 @@ const secret = 'iqwefVDedh6230Twd9328Gued78';
 
 app.use(cors({
     credentials:true,
-    origin:true,
+    origin:"https://blog-mern-jgh8.onrender.com",
 }));
 
 app.use(express.json());
