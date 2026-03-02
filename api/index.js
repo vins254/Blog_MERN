@@ -65,7 +65,11 @@ app.post('/login', async (req,res) => {
         //logged in
         jwt.sign({username,id:userDoc._id}, secret, {}, (err,token) => {
            if (err) throw err;
-           res.cookie('token', token).json({
+           res.cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            }).json({
             id:userDoc._id,
             username,
            }); 
@@ -100,25 +104,40 @@ app.post('/logout', (req,res) => {
 });
 
 app.post('/post', uploadMiddleware.single('file'), async (req,res) => {
-    const {originalname,path} = req.file;
-    const parts = originalname.split('.');
-    const ext = parts[parts.length - 1];
-    const newPath = path+'.'+ext;
-    fs.renameSync(path, newPath);
+    try {
+        let newPath = null;
+        if (req.file) {
+            const {originalname,path} = req.file;
+            const parts = originalname.split('.');
+            const ext = parts[parts.length - 1];
+            newPath = path+'.'+ext;
+            fs.renameSync(path, newPath);
+        }
+        
+        const {token} = req.cookies;
+        if (!token) {
+            return res.status(401).json({ message: "Not authenticated" });
+        }
+        jwt.verify(token, secret, {}, async(err, info) => {
+            if (err) {
+                return res.status(403).json({ message: "Invalid token" });
+            }
+            const {title,summary,content} = req.body;
+            const postDoc = await Post.create({
+                title,
+                summary,
+                content,
+                cover:newPath,
+                author:info.id,
+            });
+            res.json(postDoc);
+        });    
 
-    const {token} = req.cookies;
-    jwt.verify(token, secret, {}, async(err, info) => {
-        if (err) throw err;
-        const {title,summary,content} = req.body;
-        const postDoc = await Post.create({
-            title,
-            summary,
-            content,
-            cover:newPath,
-            author:info.id,
-        });
-        res.json(postDoc);
-    });    
+    } catch(error) {
+        console.error(error);
+        res.status(500).json({message: "Server error"});
+    }
+    
 });  
 
 app.put('/post', uploadMiddleware.single('file'), async (req,res) => {
