@@ -8,14 +8,17 @@ export default function CreatePost() {
     const [title,setTitle] = useState('');
     const [summary,setSummary] = useState('');
     const [content,setContent] = useState('');
-    const [files, setFiles] = useState('');
+    const [files, setFiles] = useState(null);
     const [redirect, setRedirect] = useState(false);
     async function createNewPost(ev) {
         const data = new FormData();
         data.set('title', title);
         data.set('summary', summary);
         data.set('content', content);
-        data.set('file', files[0]);
+        if (files && files[0]) {
+            data.set('file', files[0]);
+        }
+        
         ev.preventDefault();
         
         const response = await fetch(`${process.env.REACT_APP_API_URL}/post`, {
