@@ -283,6 +283,27 @@ button:hover {
   font-weight: 500;
 }
 
+.success-banner {
+  background-color: #e0e7ff;
+  color: #4338ca;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid #c7d2fe;
+}
+
+.input-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: -16px;
+  margin-bottom: 16px;
+  margin-left: 4px;
+}
+
 /* Post Page Deep Read */
 div.post-page {
   max-width: 800px;
