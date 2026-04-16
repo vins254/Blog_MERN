@@ -9,6 +9,11 @@ export default function RegisterPage() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/;
+    const isPasswordLongEnough = password.length >= 6;
+    const isPasswordComplex = passwordRegex.test(password);
+    const showPasswordError = password.length > 0 && (!isPasswordLongEnough || !isPasswordComplex);
+
     async function register(ev) {
         ev.preventDefault();
         setError('');
@@ -18,8 +23,8 @@ export default function RegisterPage() {
             return;
         }
 
-        if (password.length < 6) {
-            setError('Password is too short');
+        if (!isPasswordLongEnough || !isPasswordComplex) {
+            setError('Password does not meet requirements');
             return;
         }
 
@@ -62,7 +67,9 @@ export default function RegisterPage() {
                 placeholder="Password"
                 value={password}
                 onChange={ev => setPassword(ev.target.value)} />
-            <span className="input-hint">Min. 6 characters</span>
+            <span className={`input-hint ${showPasswordError ? 'error' : ''}`}>
+                Min. 6 characters with mixed Case, Numbers & Symbols
+            </span>
 
             <input type="password"
                 placeholder="Confirm Password"

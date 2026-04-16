@@ -304,6 +304,11 @@ button:hover {
   margin-left: 4px;
 }
 
+.input-hint.error {
+  color: #ef4444;
+  font-weight: 500;
+}
+
 /* Post Page Deep Read */
 div.post-page {
   max-width: 800px;

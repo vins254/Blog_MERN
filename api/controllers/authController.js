@@ -17,8 +17,9 @@ const register = async (req, res) => {
         return res.status(400).json({ message: 'Passwords do not match' });
     }
 
-    if (password.length < 6) {
-        return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/;
+    if (password.length < 6 || !passwordRegex.test(password)) {
+        return res.status(400).json({ message: 'Password must be at least 6 characters and include uppercase, lowercase, numbers, and symbols' });
     }
 
     // Strict email validation
