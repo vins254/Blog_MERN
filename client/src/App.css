@@ -1,15 +1,25 @@
-/* Modern Editorial Typography & Color Palette */
+/* 
+ * MODERN EDITORIAL DESIGN SYSTEM
+ * 
+ * Philosophy: Typography-first, high-readability layout inspired by premium 
+ * digital publications like Medium and Ghost.
+ * 
+ * Design Tokens:
+ * - Typography: Inter (Sans-Serif) for modern clarity.
+ * - Colors: Warm Cream (#faf9f6) vs Vibrant Indigo (#6366f1).
+ * - Palette: Curated HSL-tailored shades for accessibility and dark-mode comfort.
+ */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
   /* Editorial Light Theme */
-  --primary: #6366f1; /* Vibrant Indigo */
+  --primary: #6366f1; /* Vibrant Indigo - Used for interaction & highlights */
   --primary-hover: #4f46e5;
-  --bg-body: #faf9f6; /* Warm Off-White / Cream */
+  --bg-body: #faf9f6; /* Warm Off-White / Cream - Reduces eye strain */
   --bg-surface: #ffffff;
-  --bg-header: rgba(250, 249, 246, 0.85); /* Matches bg-body for glass effect */
-  --text-main: #18181b; /* Deep Zinc */
-  --text-muted: #52525b; /* Muted Zinc */
+  --bg-header: rgba(250, 249, 246, 0.85); /* Glassmorphism background */
+  --text-main: #18181b; /* Deep Zinc - High contrast text */
+  --text-muted: #52525b; /* Muted Zinc - Secondary info */
   --border: #e4e4e7;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow: 0 4px 12px -2px rgb(0 0 0 / 0.05), 0 2px 6px -1px rgb(0 0 0 / 0.05);
@@ -18,7 +28,7 @@
 }
 
 [data-theme='dark'] {
-  /* Premium Dark Theme */
+  /* Premium Dark Theme - Optimized for nocturnal reading */
   --bg-body: #09090b;
   --bg-surface: #18181b;
   --bg-header: rgba(9, 9, 11, 0.85);
@@ -49,7 +59,7 @@ h1, h2, h3, h4, .logo {
 
 main {
   padding: 32px 24px;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -69,9 +79,9 @@ header {
   margin-bottom: 56px;
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1200px) {
   header {
-    padding: 24px calc((100vw - 1000px) / 2 + 24px);
+    padding: 24px calc((100vw - 1200px) / 2 + 24px);
   }
 }
 
@@ -90,7 +100,130 @@ header a.logo:hover {
 header nav {
   display: flex;
   align-items: center;
-  gap: 24px;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.theme-toggle:hover {
+  color: var(--primary);
+}
+
+.create-post-link {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.create-post-link:hover {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* User Profile Dropdown */
+.user-menu-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 20px;
+  transition: background-color 0.2s;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.user-menu-trigger:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--primary);
+}
+
+.user-icon {
+  width: 32px;
+  height: 32px;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: var(--bg-surface);
+  min-width: 180px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  border: 1px solid var(--border);
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.user-dropdown a {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.user-dropdown a:hover {
+  background-color: var(--bg-body);
+  color: var(--primary);
+}
+
+.user-dropdown .logout-btn {
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+  padding-top: 12px;
+  color: #ef4444;
+}
+
+.user-dropdown .logout-btn:hover {
+  background-color: #fef2f2;
+  color: #ef4444;
 }
 
 header nav a, header nav button, header nav span.theme-toggle {

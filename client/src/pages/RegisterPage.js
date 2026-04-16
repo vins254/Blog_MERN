@@ -1,6 +1,11 @@
 import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
+/**
+ * RegisterPage Component
+ * Handles new user signups with advanced real-time password strength validation.
+ * Blocks registration for weak passwords and enforces strict format requirements.
+ */
 export default function RegisterPage() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -11,6 +16,11 @@ export default function RegisterPage() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
 
+    /**
+     * Calculates the complexity level of a password.
+     * Tiers: Weak, Strong, Very Strong.
+     * Criteria: length, caps, lowercase, numbers, and symbols.
+     */
     function getPasswordStrength(pass) {
         if (!pass) return { level: '', class: '' };
         
@@ -27,6 +37,7 @@ export default function RegisterPage() {
         if (hasNumber) score++;
         if (hasSymbol) score++;
 
+        // Minimum requirement: 6 characters + at least 1 other criterion
         if (length < 6 || score <= 1) return { level: 'Weak', class: 'weak' };
         if (score <= 3) return { level: 'Strong', class: 'strong' };
         return { level: 'Very Strong', class: 'very-strong' };
@@ -34,6 +45,10 @@ export default function RegisterPage() {
 
     const strength = getPasswordStrength(password);
 
+    /**
+     * Handles the form submission for registration.
+     * Includes client-side pre-checks for password matching and strength.
+     */
     async function register(ev) {
         ev.preventDefault();
         setError('');

@@ -51,6 +51,21 @@ export default function CreatePost() {
                 <option value="Lifestyle">Lifestyle</option>
                 <option value="Travel">Travel</option>
                 <option value="Finance">Finance</option>
+                <option value="Business">Business</option>
+                <option value="Health">Health & Fitness</option>
+                <option value="Education">Education</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Food">Food & Cooking</option>
+                <option value="Fashion">Fashion & Beauty</option>
+                <option value="Science">Science</option>
+                <option value="Environment">Environment</option>
+                <option value="Politics">Politics</option>
+                <option value="Sports">Sports</option>
+                <option value="Gaming">Gaming</option>
+                <option value="DIY">DIY & Crafts</option>
+                <option value="Art">Arts & Culture</option>
+                <option value="Photography">Photography</option>
+                <option value="News">News & Media</option>
                 <option value="Other">Other</option>
             </select>
             <input type="file" 

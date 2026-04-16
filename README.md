@@ -1,90 +1,84 @@
-# Modern MERN Blog Application
+# ✨ Modern MERN Blog: Editorial Suite
 
-A sleek, professional, and scalable blog platform built with the MERN stack (MongoDB, Express, React, Node.js). This project features a clean typography-first design, robust authentication, and intuitive content management.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tech: MERN](https://img.shields.io/badge/Stack-MERN-blue.svg)](https://www.mongodb.com/mern-stack)
 
-![Header Image](https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=1000)
+A premium, typography-centric blog platform built for high-readability and robust security. Inspired by modern digital publications like Ghost and Medium, this suite offers a seamless transition from registration to content creation.
 
-## ✨ Features
+![Desktop Preview](https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=1000)
 
-- **Responsive Design**: optimized for desktop, tablet, and mobile devices.
-- **Full Authentication**: Secure login and registration with JWT and HTTP-only cookies.
-- **Content Management**: Create, edit, and manage blog posts with rich text support.
-- **Search & Filtering**: Real-time client-side search filtering by title and summary.
-- **Categories**: Predefined categories (Tech, Lifestyle, Travel, Finance) for better organization.
-- **Image Uploads**: Support for cover images for every post.
-- **Professional UI**: Clean, minimal interface inspired by Medium and Ghost.
+## 🌟 Key Highlights
+
+- **Modern Editorial UI**: Typography-first design using the **Inter** font family, a warm cream palette to reduce eye strain, and a sophisticated Dark Mode.
+- **Advanced Security**: 
+    - Generic error messages to prevent **User Enumeration**.
+    - Tiered **Password Strength Meter** (Weak/Strong/Very Strong) with real-time feedback.
+    - JWT-based authentication stored in **HttpOnly Secure Cookies** to mitigate XSS attacks.
+- **Intuitive Content Management**: Fully-featured Rich Text Editor (React-Quill) with support for cover image uploads and 20+ creative categories.
+- **Smart UX**: 
+    - Automated **Password Manager** handoff (Autofill support).
+    - Context-aware UI elements (Search bar hides on Auth pages).
+    - Author-only moderation (Only the original author can edit or delete their posts).
 
 ## 🚀 Tech Stack
 
-- **Frontend**: React.js, React Router, Date-fns
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB (via Mongoose)
-- **Authentication**: JSON Web Tokens (JWT), Bcrypt.js
-- **Styling**: Vanilla CSS (Modern CSS variables & Grid)
-- **File Handling**: Multer
-
-## 🛠️ Installation & Setup
-
-### Prerequisites
-- Node.js installed
-- MongoDB Atlas account or local MongoDB instance
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/vins254/Blog_MERN.git
-cd Blog_MERN
-```
-
-### 2. Backend Configuration
-Create a `.env` file in the root directory:
-```env
-MONGO_URL=your_mongodb_connection_string
-JWT_SECRET=your_random_secret_key
-CLIENT_URL=http://localhost:3000
-```
-
-### 3. Frontend Configuration
-Create a `.env` file in the `client` directory:
-```env
-REACT_APP_API_URL=http://localhost:4000
-```
-
-### 4. Install Dependencies
-```bash
-# Install root (backend) dependencies
-npm install
-
-# Install frontend dependencies
-cd client
-npm install
-```
-
-### 5. Run the Application
-```bash
-# From the root directory, start the backend
-npm run dev
-
-# In a new terminal, start the frontend
-cd client
-npm start
-```
+- **Frontend**: React.js, Context API, Vanilla CSS (Variables & Tokens)
+- **Backend**: Node.js, Express.js (Modular Architecture)
+- **Database**: MongoDB (Atlas) via Mongoose
+- **Auth**: JWT, Bcrypt.js, Cookie-Parser
+- **Media**: Multer (File management)
 
 ## 📂 Project Structure
 
 ```text
 ├── api/
-│   ├── controllers/    # Request logic
-│   ├── models/         # Database schemas
-│   ├── routes/          # API endpoints
-│   ├── middleware/      # Auth & error handlers
-│   └── index.js         # Entry point
+│   ├── controllers/    # Domain-specific logic (Auth, Post)
+│   ├── models/         # Mongoose Schemas (User, Post)
+│   ├── routes/         # Express Router definitions
+│   ├── middleware/     # Security & Auth filters
+│   ├── uploads/        # Local storage for post covers
+│   └── index.js        # Main server entry point
 ├── client/
 │   ├── src/
-│   │   ├── pages/       # Page components
-│   │   ├── Post.js      # List item component
-│   │   └── App.css      # Modern styles
+│   │   ├── pages/      # View components (Login, Register, Dashboard)
+│   │   ├── Post.js     # Post card component
+│   │   ├── Header.js   # Navigation & Theme Control
+│   │   └── App.css     # Design System & Token definitions
 └── ...
 ```
 
-## 📝 License
-This project is licensed under the MIT License.
+## 🛠️ Installation & Quick Start
+
+### 1. Requirements
+Ensure you have **Node.js** and a **MongoDB Atlas** cluster ready.
+
+### 2. Environment Setup
+Create a `.env` in the root directory:
+```env
+MONGO_URL=your_mongodb_atlas_uri
+JWT_SECRET=a_long_random_secure_string
+CLIENT_URL=http://localhost:3000
+```
+
+Create a `.env` in the `client/` directory:
+```env
+REACT_APP_API_URL=http://localhost:4000
+```
+
+### 3. Launch
+```bash
+# Terminal 1: Backend
+npm install
+npm run dev
+
+# Terminal 2: Frontend
+cd client
+npm install
+npm start
+```
+
+## 📖 Extended Documentation
+For a deep dive into the architecture, security principles, and design philosophy, see the [**DOCUMENTATION.md**](./DOCUMENTATION.md) file.
+
+---
+Developed by **Antigravity** | [MIT License](./LICENSE)
