@@ -17,9 +17,21 @@ const register = async (req, res) => {
         return res.status(400).json({ message: 'Passwords do not match' });
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/;
-    if (password.length < 6 || !passwordRegex.test(password)) {
-        return res.status(400).json({ message: 'Password must be at least 6 characters and include uppercase, lowercase, numbers, and symbols' });
+    // Password Strength Check (Backend Enforcement)
+    const hasUpper = /[A-Z]/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSymbol = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    
+    let score = 0;
+    if (password.length >= 6) score++;
+    if (password.length >= 10) score++;
+    if (hasUpper && hasLower) score++;
+    if (hasNumber) score++;
+    if (hasSymbol) score++;
+
+    if (password.length < 6 || score <= 1) {
+        return res.status(400).json({ message: 'Password is too weak. Must be at least 6 characters and use mixed character types.' });
     }
 
     // Strict email validation

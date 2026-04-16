@@ -302,11 +302,50 @@ button:hover {
   margin-top: -16px;
   margin-bottom: 16px;
   margin-left: 4px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
 }
 
-.input-hint.error {
-  color: #ef4444;
-  font-weight: 500;
+input:focus + .input-hint, .input-hint.visible {
+  opacity: 1;
+}
+
+.input-hint.weak { color: #ef4444; font-weight: 600; }
+.input-hint.strong { color: #6366f1; font-weight: 600; }
+.input-hint.very-strong { color: #10b981; font-weight: 600; }
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper input {
+  padding-right: 48px; /* Space for the toggle icon */
+}
+
+.password-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  width: auto;
+  padding: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: var(--primary);
+  transform: none;
+}
+
+.password-toggle svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* Post Page Deep Read */
