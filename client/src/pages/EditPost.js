@@ -9,6 +9,7 @@ export default function EditPost() {
     const [summary,setSummary] = useState('');
     const [content,setContent] = useState('');
     const [files, setFiles] = useState('');
+    const [category, setCategory] = useState('');
     const [redirect, setRedirect] = useState(false);
     
    
@@ -19,6 +20,7 @@ export default function EditPost() {
                     setTitle(postInfo.title);
                     setContent(postInfo.content);
                     setSummary(postInfo.summary);
+                    setCategory(postInfo.category || 'Other');
                 });
             });
     }, [id]);
@@ -29,6 +31,7 @@ export default function EditPost() {
         data.set('title', title);
         data.set('summary', summary);
         data.set('content', content);
+        data.set('category', category);
         data.set('id', id);
         if (files?.[0]) {
             data.set('file', files?.[0]);
@@ -58,6 +61,13 @@ export default function EditPost() {
                     placeholder={'Summary'} 
                     value={summary}
                     onChange={ev => setSummary(ev.target.value)} />
+            <select value={category} onChange={ev => setCategory(ev.target.value)}>
+                <option value="Tech">Tech</option>
+                <option value="Lifestyle">Lifestyle</option>
+                <option value="Travel">Travel</option>
+                <option value="Finance">Finance</option>
+                <option value="Other">Other</option>
+            </select>
             <input type="file" 
                     //value={files} 
                     onChange={ev => setFiles(ev.target.files)}/>
