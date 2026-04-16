@@ -6,15 +6,36 @@ const salt = bcrypt.genSaltSync(10);
 const secret = process.env.JWT_SECRET;
 
 const register = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, email, password, confirmPassword } = req.body;
+    
+    // Basic validations
+    if (!username || !email || !password || !confirmPassword) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    if (password !== confirmPassword) {
+        return res.status(400).json({ message: 'Passwords do not match' });
+    }
+
+    // Strict email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: 'Invalid email format' });
+    }
+
     try {
         const userDoc = await User.create({
             username,
+            email,
             password: bcrypt.hashSync(password, salt),
         });
         res.json(userDoc);
     } catch (e) {
         console.log(e);
+        if (e.code === 11000) {
+            const field = Object.keys(e.keyValue)[0];
+            return res.status(400).json({ message: `${field} already exists` });
+        }
         res.status(400).json(e);
     }
 };
