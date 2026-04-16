@@ -6,10 +6,12 @@ export default function LoginPage() {
     const [username,setUsername] = useState('');
     const [password,setPassword] = useState('');
     const [redirect,setRedirect] = useState(false);
+    const [error, setError] = useState('');
     const {setUserInfo} = useContext(UserContext);
 
     async function login(ev) {
         ev.preventDefault();
+        setError('');
         const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
             method: 'POST',
             body: JSON.stringify({username, password}),
@@ -22,7 +24,8 @@ export default function LoginPage() {
                 setRedirect(true);
             });          
         } else {
-            alert('wrong credentials');
+            const data = await response.json();
+            setError(data.message || 'Login failed');
         }
     }
 
@@ -31,16 +34,17 @@ export default function LoginPage() {
     }
     return(
         <form className="login" onSubmit={login}>
-            <h1>Login</h1>
+            <h1>Welcome Back</h1>
+            {error && <div className="error-message">{error}</div>}
             <input type="text" 
-                    placeholder="username" 
+                    placeholder="Username" 
                     value={username}
                     onChange={ev => setUsername(ev.target.value)}/>
             <input type="password" 
-                    placeholder="password" 
+                    placeholder="Password" 
                     value={password}
                     onChange={ev => setPassword(ev.target.value)}/>
-            <button>Login</button>
+            <button>Sign In</button>
         </form>
     );
 }

@@ -43,9 +43,11 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { username, password } = req.body;
     const userDoc = await User.findOne({ username });
+    
     if (!userDoc) {
-        return res.status(400).json('user not found');
+        return res.status(400).json({ message: 'Invalid username or password' });
     }
+
     const passOk = bcrypt.compareSync(password, userDoc.password);
     if (passOk) {
         jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
@@ -60,7 +62,7 @@ const login = async (req, res) => {
             });
         });
     } else {
-        res.status(400).json('wrong credentials');
+        res.status(400).json({ message: 'Invalid username or password' });
     }
 };
 
