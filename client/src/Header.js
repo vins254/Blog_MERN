@@ -87,6 +87,7 @@ export default function Header() {
 
                     {username ? (
                         <>
+                            <Link to={`/posts/user/${userInfo.id}`} className="nav-link">My Blogs</Link>
                             <Link to="/create" className="create-post-link">Create Post</Link>
                             <div className="user-menu-container" ref={dropdownRef}>
                                 <button className="user-menu-trigger" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
@@ -103,7 +104,7 @@ export default function Header() {
                                 
                                 {isDropdownOpen && (
                                     <div className="user-dropdown">
-                                        <Link to={`/posts/user/${userInfo.id}`}>My Blogs</Link>
+                                        <div className="dropdown-user-info">Logged in as <strong>{username}</strong></div>
                                         <button type="button" onClick={logout} className="logout-btn">Logout</button>
                                     </div>
                                 )}

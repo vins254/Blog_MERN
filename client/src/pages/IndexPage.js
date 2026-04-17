@@ -4,14 +4,18 @@ import { UserContext } from "../UserContext";
 
 export default function IndexPage() {
     const [posts, setPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const {searchQuery} = useContext(UserContext);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/post`).then(response => {
-            response.json().then(posts => {
+        setIsLoading(true);
+        fetch(`${process.env.REACT_APP_API_URL}/post`)
+            .then(response => response.json())
+            .then(posts => {
                 setPosts(posts);
-            });
-        });
+                setIsLoading(false);
+            })
+            .catch(() => setIsLoading(false));
     }, []);
 
     const filteredPosts = posts.filter(post => 
@@ -19,15 +23,26 @@ export default function IndexPage() {
         post.summary.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    if (isLoading) {
+        return (
+            <div className="loading-container">
+                <div className="loader"></div>
+                <p>Curating stories for you...</p>
+            </div>
+        );
+    }
+
     return(
         <>
             {filteredPosts.length > 0 ? (
-                filteredPosts.map(post => (
-                    <Post key={post._id} {...post} />
-                ))
+                <div className="posts-container">
+                    {filteredPosts.map(post => (
+                        <Post key={post._id} {...post} />
+                    ))}
+                </div>
             ) : (
                 <div className="no-results">
-                    {searchQuery ? `No posts found matching "${searchQuery}"` : "No posts available."}
+                    {searchQuery ? `No posts found matching "${searchQuery}"` : "No posts available at the moment."}
                 </div>
             )}
         </>

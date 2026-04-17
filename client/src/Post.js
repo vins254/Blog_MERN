@@ -2,11 +2,19 @@ import {Link} from "react-router-dom";
 import {formatISO9075} from "date-fns";
 
 export default function Post({_id,title,summary,cover,createdAt,author,category}) {
+    // Robust image URL handling
+    const getImageUrl = (path) => {
+        if (!path) return '';
+        const baseUrl = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
+        const cleanPath = path.replace(/^\/+/, "");
+        return `${baseUrl}/${cleanPath}`;
+    };
+
     return(
         <div className="post">
             <div className="image">
                 <Link to={`/post/${_id}`}>
-                    <img src={`${process.env.REACT_APP_API_URL}/` + cover} alt={title}/>
+                    <img src={getImageUrl(cover)} alt={title}/>
                 </Link>
             </div>
             <div className="texts">
