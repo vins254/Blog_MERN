@@ -1,80 +1,83 @@
-# 📖 Technical Documentation: Modern MERN Blog
+# 📖 Project Documentation
 
-This document provides a deep dive into the architecture, security infrastructure, and design philosophy of the Modern MERN Blog Application.
-
----
-
-## 🏗️ Architecture Overview
-
-The application follows a decoupled **Client-Server Architecture** utilizing a RESTful JSON API.
-
-### **1. Data Flow**
-- **Browser (React)**: Handles UI state, routing, and asynchronous API calls.
-- **Server (Express)**: Manages authentication, middleware validation, and file processing.
-- **Database (MongoDB)**: Persists user profiles and blog content via Mongoose ODM.
-
-### **2. Storage**
-- **Database**: Stores structured data (Metadata, Content).
-- **Filesystem**: Stores binary data (Images) in the `api/uploads/` directory.
+This document provides a comprehensive guide to the **Modern MERN Blog** architecture, testing suite, and development lifecycle.
 
 ---
 
-## 🔐 Security Principles
+## 🏗️ Architecture Design
 
-Security was prioritized at every layer of the implementation to ensure user data integrity and protection against common web vulnerabilities.
+### Core Principles
+- **Separation of Concerns**: Business logic is isolated in `controllers`, while HTTP routing is handled in `routes`.
+- **Testability**: The Express `app` is separated from the server `index.js` to allow `supertest` to run without a live port.
+- **RESTful API**: Clean, predictable endpoints for all CRUD operations.
 
-### **Authentication & Session Management**
-- **JWT (JSON Web Tokens)**: Used for stateless authentication.
-- **Secure Cookies (HttpOnly)**: Tokens are stored in a `token` cookie with `httpOnly: true`. This prevents client-side scripts (XSS) from accessing sensitive session data.
-- **Password Hashing**: Passwords are never stored in plain text. We utilize `bcryptjs` with a cost factor of 10 to salt and hash every password.
+### Backend Structure (`api/`)
+- `app.js`: Express configuration, middleware setup, and DB connection.
+- `index.js`: Server entry point.
+- `controllers/`: Request handlers (Validates input, interacts with models).
+- `models/`: Mongoose schemas for `User` and `Post`.
+- `routes/`: Endpoint definitions.
+- `__tests__/`: Automated test suites.
 
-### **Protection Measures**
-- **Anti-Enumeration**: Both the Login and Registration endpoints use logic that prevents attackers from discovering valid usernames via error differences.
-- **Tiered Password Complexity**: A real-time strength meter enforces high-entropy passwords on both the frontend and backend.
-- **Authorization Filters**: Controllers like `deletePost` and `updatePost` perform explicit ownership checks (`req.user.id === postDoc.author`) before allowing mutations.
-
----
-
-## 🎨 Design Philosophy: "Modern Editorial"
-
-The UI is built on a **Minimalist Editorial** concept designed to maximize focus on written content.
-
-### **Typography & Hierarchy**
-- **Primary Typeface**: [Inter](https://rsms.me/inter/) - A typeface specifically designed for user interfaces and readability.
-- **Contrast**: Using a Deep Zinc (#18181b) text on a Warm Cream (#faf9f6) background reduces the harsh contrast of absolute black/white, mimicking the feel of premium paper.
-
-### **Interactive Elements**
-- **Glassmorphism**: The header uses `backdrop-filter: blur()` to create depth while maintaining context.
-- **Responsive Layouts**: Flexible Grid and Flexbox layouts ensure the "Large Format" editorial feel scales elegantly to mobile devices.
+### Frontend Structure (`client/`)
+- `src/App.js`: Routing and main layout logic.
+- `src/components/`: Reusable UI elements (Header, Post, Editor).
+- `src/pages/`: Page-level components.
+- `src/constants/`: Centralized configuration (e.g., categories).
+- `src/App.test.js`: React Testing Library integration tests.
 
 ---
 
-## 🔌 API Reference
+## 🧪 Testing Strategy
 
-### **Authentication**
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| POST | `/register` | Create a new account | No |
-| POST | `/login` | Authenticate & set session cookie | No |
-| POST | `/logout` | Clear session cookie | No |
-| GET | `/profile` | Get current user info | Yes |
+The project uses a dual-layer testing strategy to ensure reliability.
 
-### **Posts**
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| GET | `/post` | Fetch list of recent posts | No |
-| GET | `/post/:id` | Fetch specific post details | No |
-| POST | `/post` | Create a new post (w/ binary data) | Yes |
-| PUT | `/post` | Update existing post | Yes (Author Only) |
-| DELETE | `/post/:id`| Remove a post & cover image | Yes (Author Only) |
+### Backend: Jest + Supertest
+- **Scope**: API integration and unit logic.
+- **Key Suites**:
+    - `auth.test.js`: Validates registration rules, password hashing, and login sessions.
+    - `post.test.js`: Validates CRUD operations, authentication guards, and author-only permissions.
+- **How to Run**:
+  ```bash
+  # Root directory
+  npm test
+  ```
+
+### Frontend: React Testing Library
+- **Scope**: Component rendering, routing, and form presence.
+- **How to Run**:
+  ```bash
+  # Client directory
+  npm test
+  ```
+
+---
+
+## 🚀 Deployment Guide
+
+### Backend: Render
+1. Create a new **Web Service** on Render.
+2. Connect your GitHub repository.
+3. Set **Root Directory** to `api`.
+4. **Environment Variables**:
+    - `MONGO_URL`: Your Atlas connection string.
+    - `JWT_SECRET`: Random secure string.
+    - `CLIENT_URL`: Your Vercel frontend URL.
+5. **Build Command**: `npm install`
+6. **Start Command**: `node index.js`
+
+### Frontend: Vercel
+1. Create a new Project on Vercel.
+2. Set **Root Directory** to `client`.
+3. **Environment Variables**:
+    - `REACT_APP_API_URL`: Your Render backend URL.
+4. Vercel automatically detects React and handles the build (`npm run build`).
+5. **Critical**: Ensure `vercel.json` is present for client-side routing support (SPAs).
 
 ---
 
-## 🛠️ Maintenance & Scaling
-
-- **Development Mode**: Backend runs on `nodemon` for auto-restarts on change.
-- **Environment Management**: Separation of `.env` files for frontend and backend allows for easy multi-environment deployment (Staging/Production).
-- **Image Cleanup**: The server includes automated filesystem hooks to delete physical image files when a post is removed from the database.
-
----
-*Documentation generated by Antigravity AI.*
+## 🛠️ Contributor Follow-up
+If you are taking over this project:
+1. **Cleanup**: Existing uploaded files are ignored by git; create an `api/uploads/` folder if it doesn't exist.
+2. **Category Management**: To add new categories, update `client/src/constants/categories.js`.
+3. **Password Rules**: Adjust registration validation in `api/controllers/authController.js`.

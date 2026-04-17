@@ -103,7 +103,7 @@ export default function Header() {
                                 
                                 {isDropdownOpen && (
                                     <div className="user-dropdown">
-                                        <a onClick={logout} className="logout-btn">Logout</a>
+                                        <button type="button" onClick={logout} className="logout-btn">Logout</button>
                                     </div>
                                 )}
                             </div>

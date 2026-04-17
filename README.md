@@ -47,38 +47,43 @@ A premium, typography-centric blog platform built for high-readability and robus
 └── ...
 ```
 
-## 🛠️ Installation & Quick Start
+## 🧪 Automated Testing
 
-### 1. Requirements
-Ensure you have **Node.js** and a **MongoDB Atlas** cluster ready.
+The project includes a full testing suite:
+- **Backend (Jest & Supertest)**: 20+ integration tests for Auth and Posts.
+- **Frontend (React Testing Library)**: Rendering and Routing verification.
 
-### 2. Environment Setup
-Create a `.env` in the root directory:
-```env
-MONGO_URL=your_mongodb_atlas_uri
-JWT_SECRET=a_long_random_secure_string
-CLIENT_URL=http://localhost:3000
-```
-
-Create a `.env` in the `client/` directory:
-```env
-REACT_APP_API_URL=http://localhost:4000
-```
-
-### 3. Launch
+Run all backend tests:
 ```bash
-# Terminal 1: Backend
-npm install
-npm run dev
-
-# Terminal 2: Frontend
-cd client
-npm install
-npm start
+npm test
 ```
 
-## 📖 Extended Documentation
-For a deep dive into the architecture, security principles, and design philosophy, see the [**DOCUMENTATION.md**](./DOCUMENTATION.md) file.
+---
+
+## 🚀 Deployment
+
+The project is pre-configured for modern hosting platforms:
+- **Backend**: Tested on **Render**.
+- **Frontend**: Tested on **Vercel**.
+- **Database**: **MongoDB Atlas**.
+
+Detailed deployment checklists and commands can be found in [**DOCUMENTATION.md**](./DOCUMENTATION.md#deployment-guide).
+
+---
+
+## 📂 Project Structure
+
+```text
+├── api/                # Node/Express API
+│   ├── controllers/    # Business logic
+│   ├── models/         # Database schemas
+│   ├── routes/         # API endpoints
+│   └── __tests__/      # Backend test suite
+├── client/             # React Frontend
+│   ├── src/            # UI Components & Logic
+│   └── public/         # Static assets & Manifest
+└── DOCUMENTATION.md    # Detailed technical guide
+```
 
 ---
 Developed by **Antigravity** | [MIT License](./LICENSE)

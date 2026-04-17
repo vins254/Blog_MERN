@@ -11,6 +11,10 @@
  */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
 :root {
   /* Editorial Light Theme */
   --primary: #6366f1; /* Vibrant Indigo - Used for interaction & highlights */

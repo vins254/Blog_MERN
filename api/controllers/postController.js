@@ -39,37 +39,42 @@ const createPost = async (req, res) => {
  * Author Verification: Only the original author can modify the post.
  */
 const updatePost = async (req, res) => {
-    let newPath = null;
-    if (req.file) {
-        const { originalname, path } = req.file;
-        const parts = originalname.split('.');
-        const ext = parts[parts.length - 1];
-        newPath = path + '.' + ext;
-        fs.renameSync(path, newPath);
-    }
+    try {
+        let newPath = null;
+        if (req.file) {
+            const { originalname, path } = req.file;
+            const parts = originalname.split('.');
+            const ext = parts[parts.length - 1];
+            newPath = path + '.' + ext;
+            fs.renameSync(path, newPath);
+        }
 
-    const { id, title, summary, content, category } = req.body;
-    const postDoc = await Post.findById(id);
-    if (!postDoc) {
-        return res.status(404).json('post not found');
-    }
+        const { id, title, summary, content, category } = req.body;
+        const postDoc = await Post.findById(id);
+        if (!postDoc) {
+            return res.status(404).json('post not found');
+        }
 
-    // Ownership check before any update
-    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user.id);
-    if (!isAuthor) {
-        return res.status(403).json('you are not the author');
-    }
-    
-    postDoc.title = title;
-    postDoc.summary = summary;
-    postDoc.content = content;
-    postDoc.category = category || 'Other';
-    if (newPath) {
-        postDoc.cover = newPath;
-    }
+        // Ownership check before any update
+        const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user.id);
+        if (!isAuthor) {
+            return res.status(403).json('you are not the author');
+        }
+        
+        postDoc.title = title;
+        postDoc.summary = summary;
+        postDoc.content = content;
+        postDoc.category = category || 'Other';
+        if (newPath) {
+            postDoc.cover = newPath;
+        }
 
-    await postDoc.save();
-    res.json(postDoc);
+        await postDoc.save();
+        res.json(postDoc);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
 };
 
 /**

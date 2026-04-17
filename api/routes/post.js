@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const multer = require('multer');
-const uploadMiddleware = multer({ dest: 'uploads/' });
+const uploadMiddleware = multer({ dest: path.join(__dirname, '../uploads') });
 const authMiddleware = require('../middleware/authMiddleware');
 const { createPost, updatePost, getPosts, getPost, deletePost } = require('../controllers/postController');
 

@@ -2,6 +2,7 @@ import "react-quill/dist/quill.snow.css";
 import {useState} from "react";
 import { Navigate } from "react-router-dom";
 import Editor from "../Editor";
+import CATEGORIES from "../constants/categories";
 
 
 export default function CreatePost() {
@@ -38,38 +39,20 @@ export default function CreatePost() {
     }
     return (
         <form onSubmit={createNewPost}>
-            <input type="title" 
+            <input type="text" 
                     placeholder={'Title'} 
                     value={title}
                     onChange={ev => setTitle(ev.target.value)} />
-            <input type="summary" 
+            <input type="text" 
                     placeholder={'Summary'} 
                     value={summary}
                     onChange={ev => setSummary(ev.target.value)} />
             <select value={category} onChange={ev => setCategory(ev.target.value)}>
-                <option value="Tech">Tech</option>
-                <option value="Lifestyle">Lifestyle</option>
-                <option value="Travel">Travel</option>
-                <option value="Finance">Finance</option>
-                <option value="Business">Business</option>
-                <option value="Health">Health & Fitness</option>
-                <option value="Education">Education</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="Food">Food & Cooking</option>
-                <option value="Fashion">Fashion & Beauty</option>
-                <option value="Science">Science</option>
-                <option value="Environment">Environment</option>
-                <option value="Politics">Politics</option>
-                <option value="Sports">Sports</option>
-                <option value="Gaming">Gaming</option>
-                <option value="DIY">DIY & Crafts</option>
-                <option value="Art">Arts & Culture</option>
-                <option value="Photography">Photography</option>
-                <option value="News">News & Media</option>
-                <option value="Other">Other</option>
+                {CATEGORIES.map(cat => (
+                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                ))}
             </select>
             <input type="file" 
-                    //value={files} 
                     onChange={ev => setFiles(ev.target.files)}/>
             <Editor value={content} onChange={setContent} />
             <button style={{marginTop:'5px'}}>Create Post</button>
