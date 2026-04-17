@@ -1,89 +1,110 @@
-# ✨ Modern MERN Blog: Editorial Suite
+# 🖋️ MERN Blog: A Premium Editorial Platform
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tech: MERN](https://img.shields.io/badge/Stack-MERN-blue.svg)](https://www.mongodb.com/mern-stack)
+![Platform Preview](https://img.shields.io/badge/Status-Deployment--Ready-success?style=for-the-badge)
+![Tech Stack](https://img.shields.io/badge/Stack-MERN-blue?style=for-the-badge)
+![UI Design](https://img.shields.io/badge/Design-Editorial--Aesthetic-indigo?style=for-the-badge)
 
-A premium, typography-centric blog platform built for high-readability and robust security. Inspired by modern digital publications like Ghost and Medium, this suite offers a seamless transition from registration to content creation.
+A high-performance, responsive full-stack blogging platform built with the MERN stack (MongoDB, Express, React, Node.js). This project features a modern editorial design inspired by platforms like Medium and Ghost, optimized for deep readability and professional content management.
 
-![Desktop Preview](https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=1000)
+---
 
-## 🌟 Key Highlights
+## ✨ Key Features
 
-- **Modern Editorial UI**: Typography-first design using the **Inter** font family, a warm cream palette to reduce eye strain, and a sophisticated Dark Mode.
-- **Advanced Security**: 
-    - Generic error messages to prevent **User Enumeration**.
-    - Tiered **Password Strength Meter** (Weak/Strong/Very Strong) with real-time feedback.
-    - JWT-based authentication stored in **HttpOnly Secure Cookies** to mitigate XSS attacks.
-- **Intuitive Content Management**: Fully-featured Rich Text Editor (React-Quill) with support for cover image uploads and 20+ creative categories.
-- **Smart UX**: 
-    - Automated **Password Manager** handoff (Autofill support).
-    - Context-aware UI elements (Search bar hides on Auth pages).
-    - Author-only moderation (Only the original author can edit or delete their posts).
+- **Editorial Design**: Clean, typography-first UI with a focus on high-readability.
+- **Dynamic Content Management**: Full CRUD operations for blog posts with rich text editing (React Quill).
+- **Secure Authentication**: Robust JWT-based authentication with protected routes and cookie-based sessions.
+- **My Blogs Dashboard**: Dedicated user profile views to manage and track personal publications.
+- **Responsive Layout**: Fluid design that scales beautifully from mobile (iPhone/Android) to 4K desktops.
+- **Image Processing**: Automatic image normalization and serving via a dedicated static asset pipeline.
+- **Search & Filter**: Real-time post filtering by title, summary, and category.
+- **Theme Switching**: Integrated Dark/Light mode optimized for different reading environments.
 
-## 🚀 Tech Stack
+---
 
-- **Frontend**: React.js, Context API, Vanilla CSS (Variables & Tokens)
-- **Backend**: Node.js, Express.js (Modular Architecture)
-- **Database**: MongoDB (Atlas) via Mongoose
-- **Auth**: JWT, Bcrypt.js, Cookie-Parser
-- **Media**: Multer (File management)
+## 🛠️ Tech Stack
 
-## 📂 Project Structure
+### Frontend
+- **React.js**: Functional components and Hooks (`useContext`, `useEffect`, `useRef`).
+- **React Router 6**: Client-side routing with nested layouts and protected navigation.
+- **React Quill**: Rich text editor for content creation.
+- **Vanilla CSS**: Custom design system using HSL color tokens and modern flex/grid layouts.
+- **Date-fns**: Professional formatting for publication timestamps.
 
-```text
-├── api/
-│   ├── controllers/    # Domain-specific logic (Auth, Post)
-│   ├── models/         # Mongoose Schemas (User, Post)
-│   ├── routes/         # Express Router definitions
-│   ├── middleware/     # Security & Auth filters
-│   ├── uploads/        # Local storage for post covers
-│   └── index.js        # Main server entry point
-├── client/
-│   ├── src/
-│   │   ├── pages/      # View components (Login, Register, Dashboard)
-│   │   ├── Post.js     # Post card component
-│   │   ├── Header.js   # Navigation & Theme Control
-│   │   └── App.css     # Design System & Token definitions
-└── ...
+### Backend
+- **Node.js & Express**: High-performance RESTful API.
+- **MongoDB & Mongoose**: Schema-driven data modeling with authorship relationships.
+- **JSON Web Tokens (JWT)**: Secure, stateless session management.
+- **Bcrypt.js**: Industry-standard password hashing.
+- **Multer**: Multi-part form data handling for image uploads.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- Node.js (v18 or higher)
+- MongoDB Atlas account (or local MongoDB instance)
+
+### 2. Installation
+```powershell
+# Clone the repository
+git clone https://github.com/vins254/Blog_MERN.git
+
+# Install backend dependencies
+npm install
+
+# Install frontend dependencies
+cd client
+npm install
 ```
 
-## 🧪 Automated Testing
+### 3. Environment Configuration
+Create a `.env` file in the **root** and **client** directories:
 
-The project includes a full testing suite:
-- **Backend (Jest & Supertest)**: 20+ integration tests for Auth and Posts.
-- **Frontend (React Testing Library)**: Rendering and Routing verification.
+**Root (.env)**
+```env
+MONGO_URL=your_mongodb_connection_string
+JWT_SECRET=your_secure_random_string
+CLIENT_URL=http://localhost:3000
+```
 
-Run all backend tests:
-```bash
+**Client (.env)**
+```env
+REACT_APP_API_URL=http://localhost:4000
+```
+
+---
+
+## 🧪 Testing Suite
+
+This project includes a comprehensive set of integration and component tests to ensure stability:
+
+```powershell
+# Run backend API tests (Jest + Supertest)
+npm test
+
+# Run frontend component tests (React Testing Library)
+cd client
 npm test
 ```
 
 ---
 
-## 🚀 Deployment
+## 🌐 Deployment
 
-The project is pre-configured for modern hosting platforms:
-- **Backend**: Tested on **Render**.
-- **Frontend**: Tested on **Vercel**.
-- **Database**: **MongoDB Atlas**.
+### Backend (Render)
+1. Set the root directory to `.`
+2. Set Build Command: `npm install`
+3. Set Start Command: `node api/index.js`
+4. Add Environment Variables (`MONGO_URL`, `JWT_SECRET`, `CLIENT_URL`).
 
-Detailed deployment checklists and commands can be found in [**DOCUMENTATION.md**](./DOCUMENTATION.md#deployment-guide).
-
----
-
-## 📂 Project Structure
-
-```text
-├── api/                # Node/Express API
-│   ├── controllers/    # Business logic
-│   ├── models/         # Database schemas
-│   ├── routes/         # API endpoints
-│   └── __tests__/      # Backend test suite
-├── client/             # React Frontend
-│   ├── src/            # UI Components & Logic
-│   └── public/         # Static assets & Manifest
-└── DOCUMENTATION.md    # Detailed technical guide
-```
+### Frontend (Vercel)
+1. Add the project to Vercel.
+2. Set the Framework Preset to **Create React App**.
+3. Set the Root Directory to `client/`.
+4. Add Environment Variable `REACT_APP_API_URL`.
 
 ---
-Developed by **Antigravity** | [MIT License](./LICENSE)
+
+## 📄 License
+This project is open-source and available under the MIT License.

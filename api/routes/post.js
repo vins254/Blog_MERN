@@ -5,9 +5,11 @@ const multer = require('multer');
 const uploadMiddleware = multer({ dest: path.join(__dirname, '../uploads') });
 const authMiddleware = require('../middleware/authMiddleware');
 const { createPost, updatePost, getPosts, getPost, deletePost } = require('../controllers/postController');
+const { createPost, updatePost, getPosts, getPost, deletePost, getUserPosts } = require('../controllers/postController');
 
 router.get('/post', getPosts);
 router.get('/post/:id', getPost);
+router.get('/post/user/:id', getUserPosts);
 
 // Protected routes
 router.post('/post', authMiddleware, uploadMiddleware.single('file'), createPost);

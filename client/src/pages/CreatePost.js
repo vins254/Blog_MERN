@@ -12,7 +12,18 @@ export default function CreatePost() {
     const [files, setFiles] = useState(null);
     const [category, setCategory] = useState('Other');
     const [redirect, setRedirect] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
+
     async function createNewPost(ev) {
+        ev.preventDefault();
+        
+        // Prevent multiple submissions
+        if (isSubmitting) return;
+        
+        setIsSubmitting(true);
+        setError('');
+
         const data = new FormData();
         data.set('title', title);
         data.set('summary', summary);
@@ -22,15 +33,22 @@ export default function CreatePost() {
             data.set('file', files[0]);
         }
         
-        ev.preventDefault();
-        
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/post`, {
-            method: 'POST',
-            body: data,
-            credentials: 'include',
-        });
-        if (response.ok) {
-            setRedirect(true);
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/post`, {
+                method: 'POST',
+                body: data,
+                credentials: 'include',
+            });
+            if (response.ok) {
+                setRedirect(true);
+            } else {
+                const errData = await response.json();
+                setError(errData.message || 'Failed to create post');
+                setIsSubmitting(false);
+            }
+        } catch (e) {
+            setError('Server connection error');
+            setIsSubmitting(false);
         }
     }
 
@@ -38,15 +56,20 @@ export default function CreatePost() {
         return <Navigate to={'/'} />
     }
     return (
-        <form onSubmit={createNewPost}>
+        <form className="post-form" onSubmit={createNewPost}>
+            <h1 className="form-title">Create New Post</h1>
+            {error && <div className="error-message">{error}</div>}
+            
             <input type="text" 
                     placeholder={'Title'} 
                     value={title}
-                    onChange={ev => setTitle(ev.target.value)} />
+                    onChange={ev => setTitle(ev.target.value)} 
+                    required />
             <input type="text" 
                     placeholder={'Summary'} 
                     value={summary}
-                    onChange={ev => setSummary(ev.target.value)} />
+                    onChange={ev => setSummary(ev.target.value)} 
+                    required />
             <select value={category} onChange={ev => setCategory(ev.target.value)}>
                 {CATEGORIES.map(cat => (
                     <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -55,7 +78,9 @@ export default function CreatePost() {
             <input type="file" 
                     onChange={ev => setFiles(ev.target.files)}/>
             <Editor value={content} onChange={setContent} />
-            <button style={{marginTop:'5px'}}>Create Post</button>
+            <button style={{marginTop:'15px'}} disabled={isSubmitting}>
+                {isSubmitting ? 'Creating...' : 'Create Post'}
+            </button>
         </form>
     );
 }

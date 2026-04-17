@@ -103,6 +103,7 @@ export default function Header() {
                                 
                                 {isDropdownOpen && (
                                     <div className="user-dropdown">
+                                        <Link to={`/posts/user/${userInfo.id}`}>My Blogs</Link>
                                         <button type="button" onClick={logout} className="logout-btn">Logout</button>
                                     </div>
                                 )}

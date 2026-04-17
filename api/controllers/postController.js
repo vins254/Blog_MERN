@@ -11,11 +11,20 @@ const createPost = async (req, res) => {
         let newPath = null;
         // Image processing: Move the file to include its extension
         if (req.file) {
-            const { originalname, path } = req.file;
+            const { originalname, path: tempPath } = req.file;
             const parts = originalname.split('.');
             const ext = parts[parts.length - 1];
-            newPath = path + '.' + ext;
-            fs.renameSync(path, newPath);
+            // Ensure we use a clean relative path for the DB, but real path for rename
+            newPath = tempPath + '.' + ext;
+            fs.renameSync(tempPath, newPath);
+            
+            // Store only the part relevant to the static server (uploads/...)
+            // Multer path usually looks like 'api/uploads/filename' or 'uploads/filename'
+            const relativePath = newPath.replace(/\\/g, '/'); // Normalize windows slashes
+            const uploadIndex = relativePath.indexOf('uploads/');
+            if (uploadIndex !== -1) {
+                newPath = relativePath.substring(uploadIndex);
+            }
         }
 
         const { title, summary, content, category } = req.body;
@@ -42,11 +51,18 @@ const updatePost = async (req, res) => {
     try {
         let newPath = null;
         if (req.file) {
-            const { originalname, path } = req.file;
+            const { originalname, path: tempPath } = req.file;
             const parts = originalname.split('.');
             const ext = parts[parts.length - 1];
-            newPath = path + '.' + ext;
-            fs.renameSync(path, newPath);
+            newPath = tempPath + '.' + ext;
+            fs.renameSync(tempPath, newPath);
+            
+            // Normalize path for DB
+            const relativePath = newPath.replace(/\\/g, '/');
+            const uploadIndex = relativePath.indexOf('uploads/');
+            if (uploadIndex !== -1) {
+                newPath = relativePath.substring(uploadIndex);
+            }
         }
 
         const { id, title, summary, content, category } = req.body;
@@ -132,10 +148,27 @@ const deletePost = async (req, res) => {
     }
 };
 
+/**
+ * Fetches all posts created by a specific user.
+ * Used for the "My Blogs" profile view.
+ */
+const getUserPosts = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const posts = await Post.find({ author: id })
+            .populate('author', ['username'])
+            .sort({ createdAt: -1 });
+        res.json(posts);
+    } catch (e) {
+        res.status(400).json('Error fetching user posts');
+    }
+};
+
 module.exports = {
     createPost,
     updatePost,
     getPosts,
     getPost,
+    getUserPosts,
     deletePost
 };
