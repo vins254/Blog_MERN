@@ -24,24 +24,26 @@ const app = express();
  */
 /**
  * CORS Configuration
- * Dynamically allows the production client URL (from .env) 
- * and localhost for development convenience.
+ * Dynamically allows the production client URL (normalized to remove trailing slashes) 
+ * and localhost for development.
  */
+const normalizeUrl = (url) => url ? url.replace(/\/+$/, "") : null;
+
 const allowedOrigins = [
-    process.env.CLIENT_URL,
+    normalizeUrl(process.env.CLIENT_URL),
     "http://localhost:3000",
-].filter(Boolean); // Remove null/undefined
+].filter(Boolean);
 
 app.use(cors({
     credentials: true,
     origin: (origin, callback) => {
         // Allow requests with no origin (like mobile apps or curl)
-        if (!origin) return callback(null, true);
+        const normalizedOrigin = normalizeUrl(origin);
         
-        if (allowedOrigins.includes(origin)) {
+        if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin)) {
             callback(null, true);
         } else {
-            console.error(`CORS Error: Origin ${origin} not allowed`);
+            console.error(`CORS Error: Origin [${origin}] (normalized: [${normalizedOrigin}]) not allowed. Expected one of: ${JSON.stringify(allowedOrigins)}`);
             callback(new Error('Not allowed by CORS'));
         }
     },
