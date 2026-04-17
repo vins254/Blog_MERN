@@ -8,7 +8,6 @@ export default function PostPage() {
     const [postInfo, setPostInfo] = useState(null);
     const {userInfo} = useContext(UserContext);
     const {id} = useParams();  
-    const [redirect, setRedirect] = useState(false);
     const [deleteRedirect, setDeleteRedirect] = useState(false);
 
     useEffect(() => {
@@ -37,10 +36,6 @@ export default function PostPage() {
 
     if (deleteRedirect) {
         return <Navigate to={`/posts/user/${userInfo.id}`} />;
-    }
-
-    if (redirect) {
-        return <Navigate to={'/'} />
     }
 
     if (!postInfo) return '';
