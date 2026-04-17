@@ -28,7 +28,7 @@ export default function RegisterPage() {
         const hasUpper = /[A-Z]/.test(pass);
         const hasLower = /[a-z]/.test(pass);
         const hasNumber = /[0-9]/.test(pass);
-        const hasSymbol = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pass);
+        const hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(pass);
         
         let score = 0;
         if (length >= 6) score++;
