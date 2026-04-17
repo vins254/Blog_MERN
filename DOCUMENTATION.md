@@ -76,6 +76,17 @@ The project uses a dual-layer testing strategy to ensure reliability.
 
 ---
 
+## 🛠️ Troubleshooting CORS & Connectivity
+
+If you encounter "Server Connection Error" during login or post creation when deployed:
+
+1. **Verify Render (Backend) Environment Variables**:
+   - `CLIENT_URL` must match your Vercel production URL (e.g., `https://blog-mern-roan.vercel.app`).
+   - Ensure there is **no trailing slash** at the end of the URL.
+2. **Verify Vercel (Frontend) Environment Variables**:
+   - `REACT_APP_API_URL` must match your Render backend URL (e.g., `https://blog-api.onrender.com`).
+3. **CORS Policy**: The backend is configured to accept requests only from `CLIENT_URL` and `localhost:3000`. If you use a custom domain, ensure it's added to `api/app.js` or set as the `CLIENT_URL`.
+
 ## 🛠️ Contributor Follow-up
 If you are taking over this project:
 1. **Cleanup**: Existing uploaded files are ignored by git; create an `api/uploads/` folder if it doesn't exist.

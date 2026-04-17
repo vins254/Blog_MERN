@@ -22,9 +22,29 @@ const app = express();
  * - Cookies: Parsing cookies for authenticated sessions
  * - Static: Serving uploaded cover images
  */
+/**
+ * CORS Configuration
+ * Dynamically allows the production client URL (from .env) 
+ * and localhost for development convenience.
+ */
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    "http://localhost:3000",
+].filter(Boolean); // Remove null/undefined
+
 app.use(cors({
     credentials: true,
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.error(`CORS Error: Origin ${origin} not allowed`);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
 }));
 
 app.use(express.json());
