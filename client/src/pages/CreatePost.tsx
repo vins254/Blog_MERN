@@ -45,7 +45,8 @@ export default function CreatePost() {
                 setIsSubmitting(false);
             }
         } catch (e) {
-            setError('Server connection error');
+            console.error('Fetch error:', e);
+            setError('Server connection error. Please check your internet or if the server is running.');
             setIsSubmitting(false);
         }
     }

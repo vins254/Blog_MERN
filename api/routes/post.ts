@@ -9,7 +9,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = express.Router();
-const uploadMiddleware = multer({ dest: path.join(__dirname, '../uploads') });
+const uploadMiddleware = multer({ 
+    dest: path.join(__dirname, '../uploads'),
+    limits: { fieldSize: 10 * 1024 * 1024 } // 10MB limit for form fields
+});
 
 router.get('/post', getPosts);
 router.get('/post/:id', getPost);

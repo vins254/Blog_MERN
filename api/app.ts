@@ -17,6 +17,7 @@ const normalizeUrl = (url: string | undefined): string | null => url ? url.repla
 const allowedOrigins = [
     normalizeUrl(process.env.CLIENT_URL),
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ].filter((url): url is string => Boolean(url));
 
 app.use(cors({
@@ -53,6 +54,15 @@ app.use('/', postRoutes);
 
 app.get("/", (req, res) => {
     res.send("MERN Blog API is running");
+});
+
+// Error handling middleware
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error('Unhandled Server Error:', err);
+    res.status(err.status || 500).json({
+        message: err.message || 'Internal Server Error',
+        error: process.env.NODE_ENV === 'development' ? err : {}
+    });
 });
 
 export default app;

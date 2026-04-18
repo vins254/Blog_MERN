@@ -11,6 +11,8 @@ export default function EditPost() {
     const [files, setFiles] = useState<FileList | null>(null);
     const [category, setCategory] = useState('');
     const [redirect, setRedirect] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (id) {
@@ -25,7 +27,6 @@ export default function EditPost() {
                 });
         }
     }, [id]);
-
     async function updatePost(ev: FormEvent) {
         ev.preventDefault();
         const data = new FormData();
@@ -37,13 +38,27 @@ export default function EditPost() {
         if (files?.[0]) {
             data.set('file', files[0]);
         }
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/post`, {
-            method: 'PUT',
-            body: data,
-            credentials: 'include',
-        });
-        if (response.ok) {
-            setRedirect(true);
+
+        setIsSubmitting(true);
+        setError('');
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/post`, {
+                method: 'PUT',
+                body: data,
+                credentials: 'include',
+            });
+            if (response.ok) {
+                setRedirect(true);
+            } else {
+                const errData = await response.json();
+                setError(errData.message || 'Failed to update post');
+                setIsSubmitting(false);
+            }
+        } catch (e) {
+            console.error('Fetch error:', e);
+            setError('Server connection error. Please check your internet or if the server is running.');
+            setIsSubmitting(false);
         }
     }
 
@@ -61,6 +76,7 @@ export default function EditPost() {
                 </Link>
             </div>
             <h1 className="form-title">Edit Post</h1>
+            {error && <div className="error-message">{error}</div>}
             <input type="text" 
                     placeholder={'Title'} 
                     value={title}
@@ -77,7 +93,9 @@ export default function EditPost() {
             <input type="file" 
                     onChange={ev => setFiles(ev.target.files)}/>
             <Editor onChange={setContent} value={content} />
-            <button style={{ marginTop: '5px' }}>Update Post</button>
+            <button style={{ marginTop: '5px' }} disabled={isSubmitting}>
+                {isSubmitting ? 'Updating...' : 'Update Post'}
+            </button>
         </form>
     );
 }
