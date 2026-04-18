@@ -14,6 +14,7 @@ export interface PostData {
     author: {
         _id: string;
         username: string;
+        id?: string;
     };
 }
 

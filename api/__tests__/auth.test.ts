@@ -137,7 +137,8 @@ describe('POST /login', () => {
         // Extract the auth cookie for subsequent requests
         const cookies = res.headers['set-cookie'];
         expect(cookies).toBeDefined();
-        authCookie = cookies.map((c: string) => c.split(';')[0]).join('; ');
+        const cookieArray = Array.isArray(cookies) ? cookies : [cookies as string];
+        authCookie = cookieArray.map((c: string) => c.split(';')[0]).join('; ');
     });
 });
 
@@ -179,8 +180,9 @@ describe('POST /logout', () => {
         expect(res.body).toBe('ok');
 
         // Verify the cookie is cleared (expires in the past)
-        const cookies: string[] = res.headers['set-cookie'] || [];
-        expect(cookies).toBeDefined();
+        const rawCookies = res.headers['set-cookie'];
+        expect(rawCookies).toBeDefined();
+        const cookies = Array.isArray(rawCookies) ? rawCookies : [rawCookies as string];
         const tokenCookie = cookies.find((c: string) => c.startsWith('token='));
         expect(tokenCookie).toMatch(/token=;|token=j/);
     });

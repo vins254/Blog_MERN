@@ -30,7 +30,8 @@ beforeAll(async () => {
         .send({ username: TEST_USER.username, password: TEST_USER.password });
 
     testUserId = loginRes.body.id;
-    const cookies: string[] = loginRes.headers['set-cookie'] || [];
+    const rawCookies = loginRes.headers['set-cookie'];
+    const cookies = Array.isArray(rawCookies) ? rawCookies : (rawCookies ? [rawCookies as string] : []);
     authCookie = cookies.map((c: string) => c.split(';')[0]).join('; ');
 }, 20000);
 

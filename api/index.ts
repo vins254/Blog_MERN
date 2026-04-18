@@ -8,7 +8,7 @@ dotenv.config(); // Load variables from .env/environment into process.env
 import app from './app.js';
 
 // Use PORT from environment (defaulting to 4000 if not found)
-const PORT = process.env.PORT || 4000;
+const PORT = Number(process.env.PORT) || 4000;
 
 /**
  * Start the Express server.
