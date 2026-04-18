@@ -11,17 +11,13 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --detectOpenHandles"
   },
   "jest": {
-    "preset": "ts-jest/presets/default-esm",
     "testMatch": [
-      "**/api/__tests__/**/*.test.ts"
+      "**/api/__tests__/**/*.test.js"
     ],
     "testTimeout": 15000,
     "extensionsToTreatAsEsm": [
       ".ts"
     ],
-    "moduleNameMapper": {
-      "^(\\.{1,2}/.*)\\.js$": "$1"
-    },
     "transform": {
       "^.+\\.tsx?$": [
         "ts-jest",
@@ -29,6 +25,9 @@
           "useESM": true
         }
       ]
+    },
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
     }
   },
   "dependencies": {

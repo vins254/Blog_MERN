@@ -4,14 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const salt = bcrypt.genSaltSync(10);
-const getSecret = () => {
-    const secret = process.env.JWT_SECRET;
-    if (!secret) {
-        console.warn('Warning: JWT_SECRET not found in environment variables. Using placeholder for development.');
-        return 'secret123'; // Fallback for dev only
-    }
-    return secret;
-};
+const secret = process.env.JWT_SECRET || 'secret123';
 
 /**
  * Handles new user registration.
@@ -77,7 +70,7 @@ export const login = async (req: Request, res: Response) => {
 
     const passOk = bcrypt.compareSync(password, userDoc.password);
     if (passOk) {
-        jwt.sign({ username, id: userDoc._id }, getSecret(), {}, (err, token) => {
+        jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
             if (err) throw err;
             res.cookie('token', token, {
                 httpOnly: true,
@@ -101,7 +94,7 @@ export const profile = (req: Request, res: Response) => {
     if (!token) {
         return res.status(401).json({ message: 'Not logged in' });
     }
-    jwt.verify(token, getSecret(), {}, (err, info) => {
+    jwt.verify(token, secret, {}, (err, info) => {
         if (err) return res.status(401).json({ message: 'Invalid token' });
         res.json(info);
     });

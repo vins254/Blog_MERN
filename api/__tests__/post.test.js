@@ -1,26 +1,16 @@
+import request from 'supertest';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
+import app from '../app.js';
+import User from '../models/User.js';
+import Post from '../models/Post.js';
+
 /**
  * Post API — Unit & Integration Tests
  * 
  * Tool: Jest (test runner) + Supertest (HTTP assertions)
- * 
- * These tests validate the post CRUD endpoints:
- *   GET    /post      — List all posts
- *   POST   /post      — Create a new post (auth required)
- *   GET    /post/:id  — Get a single post
- *   PUT    /post      — Update a post (author only)
- *   DELETE /post/:id  — Delete a post (author only)
- * 
- * Strategy:
- *   - A test user is registered and logged in before all tests
- *   - A test post is created and used throughout the suite
- *   - All test data is cleaned up after the suite finishes
  */
-
-const request = require('supertest');
-const mongoose = require('mongoose');
-const app = require('../app');
-const User = require('../models/User');
-const Post = require('../models/Post');
 
 const TEST_USER = {
     username: `postuser_${Date.now()}`,
@@ -42,8 +32,8 @@ beforeAll(async () => {
         .send({ username: TEST_USER.username, password: TEST_USER.password });
 
     testUserId = loginRes.body.id;
-    const cookies = loginRes.headers['set-cookie'];
-    authCookie = cookies.map(c => c.split(';')[0]).join('; ');
+    const cookies = loginRes.headers['set-cookie'] || [];
+    authCookie = cookies.map((c) => c.split(';')[0]).join('; ');
 }, 20000);
 
 afterAll(async () => {
@@ -108,7 +98,7 @@ describe('GET /post', () => {
             .get('/post')
             .expect(200);
 
-        const post = res.body.find(p => p._id === testPostId);
+        const post = res.body.find((p) => p._id === testPostId);
         expect(post).toBeDefined();
         expect(post.title).toBe('Test Post Title');
         expect(post.author).toBeDefined();
@@ -133,13 +123,13 @@ describe('GET /post/:id', () => {
 
     test('should return 404 for non-existent post', async () => {
         const fakeId = new mongoose.Types.ObjectId();
-        const res = await request(app)
+        await request(app)
             .get(`/post/${fakeId}`)
             .expect(404);
     });
 
     test('should return 400 for invalid ID format', async () => {
-        const res = await request(app)
+        await request(app)
             .get('/post/invalid-id-format')
             .expect(400);
     });
@@ -151,7 +141,7 @@ describe('GET /post/:id', () => {
 
 describe('PUT /post', () => {
     test('should reject update without authentication', async () => {
-        const res = await request(app)
+        await request(app)
             .put('/post')
             .field('id', testPostId)
             .field('title', 'Unauthorized Update')
@@ -182,7 +172,7 @@ describe('PUT /post', () => {
 
 describe('DELETE /post/:id', () => {
     test('should reject deletion without authentication', async () => {
-        const res = await request(app)
+        await request(app)
             .delete(`/post/${testPostId}`)
             .expect(401);
     });
@@ -215,7 +205,7 @@ describe('DELETE /post/:id', () => {
             .expect(200);
 
         // Try to delete again
-        const res = await request(app)
+        await request(app)
             .delete(`/post/${tempId}`)
             .set('Cookie', authCookie)
             .expect(404);

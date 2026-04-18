@@ -1,24 +1,15 @@
+import request from 'supertest';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
+import app from '../app.js';
+import User from '../models/User.js';
+
 /**
  * Authentication API — Unit & Integration Tests
  * 
  * Tool: Jest (test runner) + Supertest (HTTP assertions)
- * 
- * These tests validate the authentication endpoints:
- *   POST /register — User registration with validation
- *   POST /login    — User login and session creation
- *   GET  /profile  — Retrieve authenticated user profile
- *   POST /logout   — Clear session cookie
- * 
- * Strategy:
- *   - Tests run against the real MongoDB Atlas database
- *   - A unique test user is created per run and cleaned up after
- *   - Cookie-based auth is tested by chaining requests
  */
-
-const request = require('supertest');
-const mongoose = require('mongoose');
-const app = require('../app');
-const User = require('../models/User');
 
 // Unique test user credentials per run to avoid collisions
 const TEST_USER = {
@@ -148,7 +139,7 @@ describe('POST /login', () => {
         // Extract the auth cookie for subsequent requests
         const cookies = res.headers['set-cookie'];
         expect(cookies).toBeDefined();
-        authCookie = cookies.map(c => c.split(';')[0]).join('; ');
+        authCookie = cookies.map((c) => c.split(';')[0]).join('; ');
     });
 });
 
@@ -190,9 +181,9 @@ describe('POST /logout', () => {
         expect(res.body).toBe('ok');
 
         // Verify the cookie is cleared (expires in the past)
-        const cookies = res.headers['set-cookie'];
+        const cookies = res.headers['set-cookie'] || [];
         expect(cookies).toBeDefined();
-        const tokenCookie = cookies.find(c => c.startsWith('token='));
+        const tokenCookie = cookies.find((c) => c.startsWith('token='));
         expect(tokenCookie).toMatch(/token=;|token=j/);
     });
 });
