@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { formatISO9075 } from "date-fns";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
-import { PostData } from "./IndexPage";
+import type { PostData } from "./IndexPage";
 
 export default function PostPage() {
     const [postInfo, setPostInfo] = useState<PostData | null>(null);

@@ -1,6 +1,6 @@
 import React, { useContext, useState, FormEvent } from "react";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../UserContext.js";
+import { UserContext } from "../UserContext";
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
