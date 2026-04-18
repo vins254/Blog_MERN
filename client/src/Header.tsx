@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { API_URL } from "./config";
 
@@ -14,6 +14,7 @@ export default function Header() {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
+    const navigate = useNavigate();
 
     // The user profile fetch is now handled centrally in UserContext.tsx
 
@@ -41,6 +42,7 @@ export default function Header() {
         });
         setUserInfo({});
         setIsDropdownOpen(false);
+        navigate('/');
     }
 
     function toggleTheme() {
