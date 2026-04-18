@@ -3,6 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { API_URL } from "./config";
 
+/**
+ * Header Component
+ * Contains the logo, navigation links, search bar, and user profile dropdown.
+ * Handles logout and theme toggling.
+ */
 export default function Header() {
     const { setUserInfo, userInfo, searchQuery, setSearchQuery, theme, setTheme } = useContext(UserContext);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -10,17 +15,7 @@ export default function Header() {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
 
-    useEffect(() => {
-        fetch(`${API_URL}/profile`, {
-            credentials: 'include',
-        }).then(response => {
-            if (response.ok) {
-                response.json().then(userInfo => {
-                    setUserInfo(userInfo);
-                });
-            }
-        });
-    }, [setUserInfo]);
+    // The user profile fetch is now handled centrally in UserContext.tsx
 
     // Close dropdown when clicking outside
     useEffect(() => {

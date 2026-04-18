@@ -7,19 +7,30 @@ import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
 import postRoutes from './routes/post.js';
 
+/**
+ * Main Express Application configuration.
+ * Handles middleware, database connection, and routing for the API.
+ */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Helper to clean up URLs for CORS matching
 const normalizeUrl = (url: string | undefined): string | null => url ? url.replace(/\/+$/, "") : null;
 
+// Defined origins allowed to access this API
 const allowedOrigins = [
     normalizeUrl(process.env.CLIENT_URL),
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ].filter((url): url is string => Boolean(url));
 
+/**
+ * CORS Configuration
+ * 'credentials: true' allows cookies to be sent from the frontend.
+ * Origin check ensures only trusted domains can communicate with the server.
+ */
 app.use(cors({
     credentials: true,
     origin: (origin, callback) => {
@@ -34,10 +45,15 @@ app.use(cors({
     },
 }));
 
-app.use(express.json());
-app.use(cookieParser());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Standard Middlewares
+app.use(express.json()); // Parse JSON request bodies
+app.use(cookieParser()); // Parse cookies from headers (for JWT session)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded images as static assets
 
+/**
+ * Database Connection logic.
+ * Uses MONGO_URL from environment variables.
+ */
 async function connectDB() {
     try {
         if (!process.env.MONGO_URL) throw new Error("MONGO_URL not found");
@@ -49,6 +65,7 @@ async function connectDB() {
 }
 connectDB();
 
+// API Routes
 app.use('/', authRoutes);
 app.use('/', postRoutes);
 
@@ -56,11 +73,14 @@ app.get("/", (req, res) => {
     res.send("MERN Blog API is running");
 });
 
-// Error handling middleware
+/**
+ * Global Error Handling Middleware
+ * Catch-all for server errors and specific Multer (file upload) errors.
+ */
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.error('Unhandled Server Error:', err);
 
-    // Handle Multer errors (like 'Field value too long')
+    // Handle Multer errors specifically (e.g., if a field value exceeds size limits)
     if (err.name === 'MulterError') {
         return res.status(413).json({
             message: `Upload error: ${err.message}`,

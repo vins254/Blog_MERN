@@ -5,12 +5,18 @@ import { UserContext } from "../UserContext";
 import type { PostData } from "./IndexPage";
 import { API_URL } from "../config";
 
+/**
+ * PostPage Component
+ * Displays the full content of a single blog post.
+ * Includes edit and delete functionality for the post author.
+ */
 export default function PostPage() {
     const [postInfo, setPostInfo] = useState<PostData | null>(null);
     const { userInfo } = useContext(UserContext);
     const { id } = useParams<{ id: string }>();
     const [deleteRedirect, setDeleteRedirect] = useState(false);
 
+    // Fetch post data on component mount or when ID changes
     useEffect(() => {
         fetch(`${API_URL}/post/${id}`)
             .then(response => {
@@ -20,6 +26,10 @@ export default function PostPage() {
             });
     }, [id]);
 
+    /**
+     * Handles post deletion.
+     * Requires confirmation and redirects to user's post list on success.
+     */
     async function deletePost() {
         if (!window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
             return;
@@ -35,18 +45,27 @@ export default function PostPage() {
         }
     }
 
+    // Redirect after successful deletion
     if (deleteRedirect) {
-        return <Navigate to={`/posts/user/${userInfo?.id}`} />;
+        return <Navigate to={`/posts/user/${userInfo?.id || userInfo?._id}`} />;
     }
 
     if (!postInfo) return null;
 
-    // Robust image URL handling
+    /**
+     * Normalizes image paths to absolute URLs.
+     */
     const getImageUrl = (path: string) => {
         if (!path) return '';
         const cleanPath = path.replace(/^\/+/, "");
         return `${API_URL}/uploads/${cleanPath}`;
     };
+
+    // Check if the current logged-in user is the author of this post
+    // We check both .id and ._id for robustness across different API response formats
+    const currentUserId = userInfo?.id || userInfo?._id;
+    const authorId = postInfo?.author?._id || postInfo?.author?.id;
+    const isAuthor = currentUserId && authorId && String(currentUserId) === String(authorId);
 
     return (
         <div className="post-page">
@@ -69,7 +88,8 @@ export default function PostPage() {
                 <time>{formatISO9075(new Date(postInfo.createdAt))}</time>
             </div>
 
-            {userInfo && userInfo.id === postInfo.author._id && (
+            {/* Only show Edit/Delete actions if the user is the author */}
+            {isAuthor && (
                 <div className="edit-row">
                     <Link className="edit-action-btn" to={`/edit/${postInfo._id}`} title="Edit Post">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

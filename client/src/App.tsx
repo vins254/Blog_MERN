@@ -11,10 +11,16 @@ import PostPage from "./pages/PostPage";
 import EditPost from './pages/EditPost';
 import UserPostsPage from "./pages/UserPostsPage";
 
+/**
+ * Main Application Component
+ * Handles client-side routing and global context initialization.
+ * All pages are wrapped in UserContextProvider for global state management.
+ */
 function App() {
   return (
     <UserContextProvider>
         <Routes>
+          {/* Main Layout wrapper provides Header/Footer for all child routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<IndexPage />} />
             <Route path="/login" element={<LoginPage />} />

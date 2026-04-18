@@ -1,3 +1,8 @@
+/**
+ * Post Controller
+ * Manages blog post operations including creation, deletion, retrieval, and file management.
+ */
+
 import { Response } from 'express';
 import Post from '../models/Post.js';
 import fs from 'fs';
@@ -6,17 +11,19 @@ import { AuthRequest } from '../middleware/authMiddleware.js';
 
 /**
  * Creates a new blog post.
+ * Handles image file renaming (adding extension) and stores metadata in MongoDB.
  */
 export const createPost = async (req: AuthRequest, res: Response) => {
     try {
         let newPath: string | null = null;
         if (req.file) {
+            // Process the uploaded image file
             const { originalname, path: tempPath } = req.file;
             const parts = originalname.split('.');
             const ext = parts[parts.length - 1];
             newPath = tempPath + '.' + ext;
-            fs.renameSync(tempPath, newPath);
-            newPath = path.basename(newPath);
+            fs.renameSync(tempPath, newPath); // Add the file extension
+            newPath = path.basename(newPath); // Store only the filename in the DB
         }
 
         const { title, summary, content, category } = req.body;
@@ -26,7 +33,7 @@ export const createPost = async (req: AuthRequest, res: Response) => {
             content,
             category: category || 'Other',
             cover: newPath,
-            author: req.user?.id,
+            author: req.user?.id, // Associate post with the logged-in user
         });
         res.json(postDoc);
     } catch (error) {
@@ -37,6 +44,7 @@ export const createPost = async (req: AuthRequest, res: Response) => {
 
 /**
  * Updates an existing blog post.
+ * Verifies that the requesting user is the original author before allowing modifications.
  */
 export const updatePost = async (req: AuthRequest, res: Response) => {
     try {
@@ -56,11 +64,13 @@ export const updatePost = async (req: AuthRequest, res: Response) => {
             return res.status(404).json('post not found');
         }
 
+        // Ownership Check: Ensure stringified IDs match
         const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user?.id);
         if (!isAuthor) {
             return res.status(403).json('you are not the author');
         }
         
+        // Update fields
         postDoc.title = title;
         postDoc.summary = summary;
         postDoc.content = content;
@@ -79,6 +89,7 @@ export const updatePost = async (req: AuthRequest, res: Response) => {
 
 /**
  * Lists the most recent posts.
+ * Populates 'author' to get the username along with the post data.
  */
 export const getPosts = async (req: AuthRequest, res: Response) => {
     res.json(
@@ -90,7 +101,7 @@ export const getPosts = async (req: AuthRequest, res: Response) => {
 };
 
 /**
- * Fetches a single post specifically by its MongoDB ID.
+ * Fetches data for a single blog post by its MongoDB ID.
  */
 export const getPost = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
@@ -104,7 +115,8 @@ export const getPost = async (req: AuthRequest, res: Response) => {
 };
 
 /**
- * Deletes a post and cleans up associated files.
+ * Deletes a post.
+ * Verifies authorship and removes the cover image from the filesystem.
  */
 export const deletePost = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
@@ -112,11 +124,13 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
         const postDoc: any = await Post.findById(id);
         if (!postDoc) return res.status(404).json('post not found');
 
+        // Security check: Only the author can delete their post
         const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user?.id);
         if (!isAuthor) {
             return res.status(403).json('you are not the author');
         }
 
+        // Clean up linked asset if it exists
         if (postDoc.cover && fs.existsSync(postDoc.cover)) {
             fs.unlinkSync(postDoc.cover);
         }
