@@ -20,8 +20,9 @@ const router = express.Router();
  * Files are temporarily stored in the 'uploads' directory.
  * Increased 'fieldSize' allows for extremely large blog post content (Quill HTML).
  */
+const UPLOADS_PATH = path.join(__dirname, '..', 'uploads');
 const uploadMiddleware = multer({ 
-    dest: path.join(__dirname, '../uploads'),
+    dest: UPLOADS_PATH,
     limits: { fieldSize: 50 * 1024 * 1024 } // 50MB limit
 });
 

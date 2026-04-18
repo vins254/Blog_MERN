@@ -48,7 +48,8 @@ app.use(cors({
 // Standard Middlewares
 app.use(express.json()); // Parse JSON request bodies
 app.use(cookieParser()); // Parse cookies from headers (for JWT session)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded images as static assets
+const UPLOADS_PATH = path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(UPLOADS_PATH)); // Serve uploaded images as static assets
 
 /**
  * Database Connection logic.

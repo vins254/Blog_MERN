@@ -8,6 +8,11 @@ import Post from '../models/Post.js';
 import fs from 'fs';
 import path from 'path';
 import { AuthRequest } from '../middleware/authMiddleware.js';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const UPLOADS_PATH = path.join(__dirname, '..', 'uploads');
 
 /**
  * Creates a new blog post.
@@ -131,8 +136,11 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
         }
 
         // Clean up linked asset if it exists
-        if (postDoc.cover && fs.existsSync(postDoc.cover)) {
-            fs.unlinkSync(postDoc.cover);
+        if (postDoc.cover) {
+            const coverPath = path.join(UPLOADS_PATH, postDoc.cover);
+            if (fs.existsSync(coverPath)) {
+                fs.unlinkSync(coverPath);
+            }
         }
 
         await postDoc.deleteOne();

@@ -19,6 +19,9 @@ export default function Post({ _id, title, summary, cover, createdAt, author, ca
     // Robust image URL handling
     const getImageUrl = (path: string) => {
         if (!path) return '';
+        // Handle potential absolute URLs or base64 (though unlikely here)
+        if (path.startsWith('http') || path.startsWith('data:')) return path;
+        
         const cleanPath = path.replace(/^\/+/, "");
         return `${API_URL}/uploads/${cleanPath}`;
     };
