@@ -1,24 +1,22 @@
+import React, { useState, FormEvent } from "react";
 import "react-quill/dist/quill.snow.css";
-import {useState} from "react";
 import { Navigate } from "react-router-dom";
-import Editor from "../Editor";
-import CATEGORIES from "../constants/categories";
-
+import Editor from "../Editor.js";
+import CATEGORIES from "../constants/categories.js";
 
 export default function CreatePost() {
-    const [title,setTitle] = useState('');
-    const [summary,setSummary] = useState('');
-    const [content,setContent] = useState('');
-    const [files, setFiles] = useState(null);
+    const [title, setTitle] = useState('');
+    const [summary, setSummary] = useState('');
+    const [content, setContent] = useState('');
+    const [files, setFiles] = useState<FileList | null>(null);
     const [category, setCategory] = useState('Other');
     const [redirect, setRedirect] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
 
-    async function createNewPost(ev) {
+    async function createNewPost(ev: FormEvent) {
         ev.preventDefault();
         
-        // Prevent multiple submissions
         if (isSubmitting) return;
         
         setIsSubmitting(true);
@@ -78,7 +76,7 @@ export default function CreatePost() {
             <input type="file" 
                     onChange={ev => setFiles(ev.target.files)}/>
             <Editor value={content} onChange={setContent} />
-            <button style={{marginTop:'15px'}} disabled={isSubmitting}>
+            <button style={{ marginTop: '15px' }} disabled={isSubmitting}>
                 {isSubmitting ? 'Creating...' : 'Create Post'}
             </button>
         </form>

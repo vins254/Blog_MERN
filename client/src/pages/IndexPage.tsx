@@ -1,11 +1,25 @@
-import { useEffect, useState, useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Post from "../Post";
 import { UserContext } from "../UserContext";
 
+export interface PostData {
+    _id: string;
+    title: string;
+    summary: string;
+    content: string;
+    cover: string;
+    createdAt: string;
+    category?: string;
+    author: {
+        _id: string;
+        username: string;
+    };
+}
+
 export default function IndexPage() {
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState<PostData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const {searchQuery} = useContext(UserContext);
+    const { searchQuery } = useContext(UserContext);
 
     useEffect(() => {
         setIsLoading(true);
@@ -32,7 +46,7 @@ export default function IndexPage() {
         );
     }
 
-    return(
+    return (
         <>
             {filteredPosts.length > 0 ? (
                 <div className="posts-container">

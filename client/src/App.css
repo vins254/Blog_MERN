@@ -666,9 +666,108 @@ input:focus + .input-hint, .input-hint.visible {
   margin-bottom: 0;
 }
 
-/* Responsive Overrides */
+/* Responsive Overrides & Mobile Optimization */
+@media screen and (max-width: 1024px) {
+  header .search-bar {
+    width: 140px;
+  }
+}
+
 @media screen and (max-width: 768px) {
+  main {
+    padding: 24px 16px;
+  }
+
+  header {
+    margin-bottom: 32px;
+    padding: 16px;
+  }
+
+  .hamburger-menu {
+    display: block !important;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    z-index: 101;
+  }
+
+  .hamburger-menu svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  header nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--bg-surface);
+    flex-direction: column;
+    padding: 80px 24px;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    transition: right 0.3s ease-in-out;
+    z-index: 100;
+  }
+
+  header nav.open {
+    right: 0;
+  }
+
+  .nav-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 32px;
+  }
+
+  .nav-link, .create-post-link {
+    width: 100%;
+    font-size: 1.1rem;
+  }
+
+  div.post {
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  div.post h2 {
+    font-size: 1.5rem;
+  }
+
   .post-page h1 {
     font-size: 2.25rem;
+    margin-bottom: 24px;
   }
+
+  .post-page .post-meta {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  form.login, form.register, form.post-form {
+    padding: 24px;
+    margin: 32px auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  header a.logo {
+    font-size: 1.4rem;
+  }
+
+  header .search-bar {
+    display: none; /* Hide search on very small screens for space */
+  }
+
+  .post-banner img {
+    max-height: 40vh;
+  }
+}
+
+/* Base styles for hamburger (hidden by default) */
+.hamburger-menu {
+  display: none;
 }

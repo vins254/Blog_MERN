@@ -1,41 +1,41 @@
-import {useEffect, useState} from "react";
+import React, { useEffect, useState, FormEvent } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import Editor from "../Editor";
-import CATEGORIES from "../constants/categories";
-
+import Editor from "../Editor.js";
+import CATEGORIES from "../constants/categories.js";
 
 export default function EditPost() {
-    const {id} = useParams();
-    const [title,setTitle] = useState('');
-    const [summary,setSummary] = useState('');
-    const [content,setContent] = useState('');
-    const [files, setFiles] = useState('');
+    const { id } = useParams<{ id: string }>();
+    const [title, setTitle] = useState('');
+    const [summary, setSummary] = useState('');
+    const [content, setContent] = useState('');
+    const [files, setFiles] = useState<FileList | null>(null);
     const [category, setCategory] = useState('');
     const [redirect, setRedirect] = useState(false);
-    
-   
+
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/post/`+id)
-            .then(response => {
-                response.json().then(postInfo => {
-                    setTitle(postInfo.title);
-                    setContent(postInfo.content);
-                    setSummary(postInfo.summary);
-                    setCategory(postInfo.category || 'Other');
+        if (id) {
+            fetch(`${process.env.REACT_APP_API_URL}/post/` + id)
+                .then(response => {
+                    response.json().then(postInfo => {
+                        setTitle(postInfo.title);
+                        setContent(postInfo.content);
+                        setSummary(postInfo.summary);
+                        setCategory(postInfo.category || 'Other');
+                    });
                 });
-            });
+        }
     }, [id]);
 
-    async function updatePost(ev) {
+    async function updatePost(ev: FormEvent) {
         ev.preventDefault();
         const data = new FormData();
         data.set('title', title);
         data.set('summary', summary);
         data.set('content', content);
         data.set('category', category);
-        data.set('id', id);
+        data.set('id', id || '');
         if (files?.[0]) {
-            data.set('file', files?.[0]);
+            data.set('file', files[0]);
         }
         const response = await fetch(`${process.env.REACT_APP_API_URL}/post`, {
             method: 'PUT',
@@ -45,11 +45,10 @@ export default function EditPost() {
         if (response.ok) {
             setRedirect(true);
         }
-        
     }
 
     if (redirect) {
-        return <Navigate to={'/post/'+id} />
+        return <Navigate to={'/post/' + id} />
     }
 
     return (
@@ -78,7 +77,7 @@ export default function EditPost() {
             <input type="file" 
                     onChange={ev => setFiles(ev.target.files)}/>
             <Editor onChange={setContent} value={content} />
-            <button style={{marginTop:'5px'}}>Update Post</button>
+            <button style={{ marginTop: '5px' }}>Update Post</button>
         </form>
     );
 }

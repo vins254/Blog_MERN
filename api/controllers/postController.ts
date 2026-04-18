@@ -1,25 +1,21 @@
-const Post = require('../models/Post');
-const fs = require('fs');
-const path = require('path');
+import { Response } from 'express';
+import Post from '../models/Post.js';
+import fs from 'fs';
+import path from 'path';
+import { AuthRequest } from '../middleware/authMiddleware.js';
 
 /**
  * Creates a new blog post.
- * Expects multiform data with an optional 'file' and required 'title', 'summary', 'content', 'category'.
- * Automatically assigns the authenticated user (from req.user) as the author.
  */
-const createPost = async (req, res) => {
+export const createPost = async (req: AuthRequest, res: Response) => {
     try {
-        let newPath = null;
-        // Image processing: Move the file to include its extension
+        let newPath: string | null = null;
         if (req.file) {
             const { originalname, path: tempPath } = req.file;
             const parts = originalname.split('.');
             const ext = parts[parts.length - 1];
-            // Ensure we use a clean relative path for the DB, but real path for rename
             newPath = tempPath + '.' + ext;
             fs.renameSync(tempPath, newPath);
-            
-            // Store only the filename in the DB
             newPath = path.basename(newPath);
         }
 
@@ -30,7 +26,7 @@ const createPost = async (req, res) => {
             content,
             category: category || 'Other',
             cover: newPath,
-            author: req.user.id, // req.user populated by authMiddleware
+            author: req.user?.id,
         });
         res.json(postDoc);
     } catch (error) {
@@ -41,30 +37,26 @@ const createPost = async (req, res) => {
 
 /**
  * Updates an existing blog post.
- * Author Verification: Only the original author can modify the post.
  */
-const updatePost = async (req, res) => {
+export const updatePost = async (req: AuthRequest, res: Response) => {
     try {
-        let newPath = null;
+        let newPath: string | null = null;
         if (req.file) {
             const { originalname, path: tempPath } = req.file;
             const parts = originalname.split('.');
             const ext = parts[parts.length - 1];
             newPath = tempPath + '.' + ext;
             fs.renameSync(tempPath, newPath);
-            
-            // Normalize path for DB: Store only the filename
             newPath = path.basename(newPath);
         }
 
         const { id, title, summary, content, category } = req.body;
-        const postDoc = await Post.findById(id);
+        const postDoc: any = await Post.findById(id);
         if (!postDoc) {
             return res.status(404).json('post not found');
         }
 
-        // Ownership check before any update
-        const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user.id);
+        const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user?.id);
         if (!isAuthor) {
             return res.status(403).json('you are not the author');
         }
@@ -87,9 +79,8 @@ const updatePost = async (req, res) => {
 
 /**
  * Lists the most recent posts.
- * Populates author information for the frontend UI.
  */
-const getPosts = async (req, res) => {
+export const getPosts = async (req: AuthRequest, res: Response) => {
     res.json(
         await Post.find()
             .populate('author', ['username'])
@@ -101,7 +92,7 @@ const getPosts = async (req, res) => {
 /**
  * Fetches a single post specifically by its MongoDB ID.
  */
-const getPost = async (req, res) => {
+export const getPost = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     try {
         const postDoc = await Post.findById(id).populate('author', ['username']);
@@ -114,21 +105,18 @@ const getPost = async (req, res) => {
 
 /**
  * Deletes a post and cleans up associated files.
- * Author Verification: Strict check to ensure only the owner can delete.
  */
-const deletePost = async (req, res) => {
+export const deletePost = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     try {
-        const postDoc = await Post.findById(id);
+        const postDoc: any = await Post.findById(id);
         if (!postDoc) return res.status(404).json('post not found');
 
-        // Security check
-        const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user.id);
+        const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user?.id);
         if (!isAuthor) {
             return res.status(403).json('you are not the author');
         }
 
-        // Clean up: Remove the physical file from the uploads directory
         if (postDoc.cover && fs.existsSync(postDoc.cover)) {
             fs.unlinkSync(postDoc.cover);
         }
@@ -142,9 +130,8 @@ const deletePost = async (req, res) => {
 
 /**
  * Fetches all posts created by a specific user.
- * Used for the "My Blogs" profile view.
  */
-const getUserPosts = async (req, res) => {
+export const getUserPosts = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     try {
         const posts = await Post.find({ author: id })
@@ -154,13 +141,4 @@ const getUserPosts = async (req, res) => {
     } catch (e) {
         res.status(400).json('Error fetching user posts');
     }
-};
-
-module.exports = {
-    createPost,
-    updatePost,
-    getPosts,
-    getPost,
-    getUserPosts,
-    deletePost
 };

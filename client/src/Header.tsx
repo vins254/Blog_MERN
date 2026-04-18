@@ -1,11 +1,12 @@
-import {Link, useLocation} from "react-router-dom";
-import { useContext, useEffect, useState, useRef} from "react";
-import { UserContext } from "./UserContext";
+import React, { useContext, useEffect, useState, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { UserContext } from "./UserContext.js";
 
 export default function Header() {
-    const {setUserInfo,userInfo, searchQuery, setSearchQuery, theme, setTheme} = useContext(UserContext);
+    const { setUserInfo, userInfo, searchQuery, setSearchQuery, theme, setTheme } = useContext(UserContext);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
+    const [isNavOpen, setIsNavOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
 
     useEffect(() => {
@@ -22,8 +23,8 @@ export default function Header() {
 
     // Close dropdown when clicking outside
     useEffect(() => {
-        function handleClickOutside(event) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setIsDropdownOpen(false);
             }
         }
@@ -31,9 +32,10 @@ export default function Header() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // Close dropdown on route change
+    // Close nav and dropdown on route change
     useEffect(() => {
         setIsDropdownOpen(false);
+        setIsNavOpen(false);
     }, [location]);
 
     function logout() {
@@ -41,7 +43,7 @@ export default function Header() {
             credentials: 'include',
             method: 'POST',
         });
-        setUserInfo(null);
+        setUserInfo({});
         setIsDropdownOpen(false);
     }
 
@@ -53,7 +55,7 @@ export default function Header() {
     const hideSearchOn = ['/login', '/register'];
     const showSearch = !hideSearchOn.includes(location.pathname);
 
-    return(
+    return (
         <header>
             <Link to="/" className="logo">MyBlog</Link>
             
@@ -71,7 +73,13 @@ export default function Header() {
                 </div>
             )}
 
-            <nav>
+            <button className="hamburger-menu" onClick={() => setIsNavOpen(!isNavOpen)} title="Toggle Navigation">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+
+            <nav className={isNavOpen ? 'open' : ''}>
                 <div className="nav-controls">
                     <span className="theme-toggle" onClick={toggleTheme} title="Toggle Dark/Light Mode">
                         {theme === 'light' ? (
@@ -97,14 +105,13 @@ export default function Header() {
                                         </svg>
                                     </div>
                                     <span className="username-display">{username}</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`chevron-icon ${isDropdownOpen ? 'rotate' : ''}`} style={{width:'12px', height:'12px', transition: 'transform 0.2s'}}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`chevron-icon ${isDropdownOpen ? 'rotate' : ''}`} style={{ width: '12px', height: '12px', transition: 'transform 0.2s' }}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                     </svg>
                                 </button>
                                 
                                 {isDropdownOpen && (
                                     <div className="user-dropdown">
-                                        <div className="dropdown-user-info">Logged in as <strong>{username}</strong></div>
                                         <button type="button" onClick={logout} className="logout-btn">Logout</button>
                                     </div>
                                 )}

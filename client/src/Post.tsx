@@ -1,20 +1,34 @@
-import {Link} from "react-router-dom";
-import {formatISO9075} from "date-fns";
+import React from "react";
+import { Link } from "react-router-dom";
+import { formatISO9075 } from "date-fns";
 
-export default function Post({_id,title,summary,cover,createdAt,author,category}) {
+interface PostProps {
+    _id: string;
+    title: string;
+    summary: string;
+    cover: string;
+    createdAt: string;
+    author: {
+        username: string;
+    };
+    category?: string;
+}
+
+export default function Post({ _id, title, summary, cover, createdAt, author, category }: PostProps) {
     // Robust image URL handling
-    const getImageUrl = (path) => {
+    const getImageUrl = (path: string) => {
         if (!path) return '';
-        const baseUrl = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
+        const envUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+        const baseUrl = envUrl.replace(/\/+$/, "");
         const cleanPath = path.replace(/^\/+/, "");
         return `${baseUrl}/uploads/${cleanPath}`;
     };
 
-    return(
+    return (
         <div className="post">
             <div className="image">
                 <Link to={`/post/${_id}`}>
-                    <img src={getImageUrl(cover)} alt={title}/>
+                    <img src={getImageUrl(cover)} alt={title} />
                 </Link>
             </div>
             <div className="texts">

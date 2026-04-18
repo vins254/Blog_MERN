@@ -1,7 +1,13 @@
-const mongoose = require('mongoose');
-const Post = require('./models/Post');
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
+import mongoose from 'mongoose';
+import Post from './models/Post.js';
+import path from 'path';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 async function migrate() {
     if (!process.env.MONGO_URL) {
@@ -18,11 +24,13 @@ async function migrate() {
 
         for (const post of posts) {
             const oldPath = post.cover;
-            const newFilename = path.basename(oldPath);
-            if (oldPath !== newFilename) {
-                post.cover = newFilename;
-                await post.save();
-                console.log(`Migrated: ${oldPath} -> ${post.cover}`);
+            if (oldPath) {
+                const newFilename = path.basename(oldPath);
+                if (oldPath !== newFilename) {
+                    post.cover = newFilename;
+                    await post.save();
+                    console.log(`Migrated: ${oldPath} -> ${post.cover}`);
+                }
             }
         }
 

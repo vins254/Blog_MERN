@@ -1,13 +1,13 @@
+import React, { useContext, useEffect, useState } from "react";
 import { formatISO9075 } from "date-fns";
-import { useContext, useEffect, useState } from "react";
-import {useParams, Navigate} from "react-router-dom";
-import { UserContext } from "../UserContext";
-import {Link} from "react-router-dom";
+import { useParams, Navigate, Link } from "react-router-dom";
+import { UserContext } from "../UserContext.js";
+import { PostData } from "./IndexPage.js";
 
 export default function PostPage() {
-    const [postInfo, setPostInfo] = useState(null);
-    const {userInfo} = useContext(UserContext);
-    const {id} = useParams();  
+    const [postInfo, setPostInfo] = useState<PostData | null>(null);
+    const { userInfo } = useContext(UserContext);
+    const { id } = useParams<{ id: string }>();
     const [deleteRedirect, setDeleteRedirect] = useState(false);
 
     useEffect(() => {
@@ -35,15 +35,16 @@ export default function PostPage() {
     }
 
     if (deleteRedirect) {
-        return <Navigate to={`/posts/user/${userInfo.id}`} />;
+        return <Navigate to={`/posts/user/${userInfo?.id}`} />;
     }
 
-    if (!postInfo) return '';
+    if (!postInfo) return null;
 
     // Robust image URL handling
-    const getImageUrl = (path) => {
+    const getImageUrl = (path: string) => {
         if (!path) return '';
-        const baseUrl = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
+        const envUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+        const baseUrl = envUrl.replace(/\/+$/, "");
         const cleanPath = path.replace(/^\/+/, "");
         return `${baseUrl}/uploads/${cleanPath}`;
     };
@@ -85,10 +86,10 @@ export default function PostPage() {
             )}
 
             <div className="post-banner">
-                <img src={getImageUrl(postInfo.cover)} alt={postInfo.title}/>
+                <img src={getImageUrl(postInfo.cover)} alt={postInfo.title} />
             </div>
             
-            <div className="content" dangerouslySetInnerHTML={{__html: postInfo.content}} />
+            <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.content }} />
         </div>
     );
 }

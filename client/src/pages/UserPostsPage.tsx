@@ -1,13 +1,14 @@
-import {useEffect, useState, useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import Post from "../Post";
-import { UserContext } from "../UserContext";
+import Post from "../Post.js";
+import { UserContext } from "../UserContext.js";
+import { PostData } from "./IndexPage.js";
 
 export default function UserPostsPage() {
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState<PostData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const {userInfo} = useContext(UserContext);
-    const {id} = useParams(); 
+    const { userInfo } = useContext(UserContext);
+    const { id } = useParams<{ id: string }>(); 
     
     const isOwner = userInfo?.id === id;
 

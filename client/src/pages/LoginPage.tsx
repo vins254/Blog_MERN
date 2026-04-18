@@ -1,23 +1,23 @@
-import {useContext, useState} from "react";
+import React, { useContext, useState, FormEvent } from "react";
 import { Navigate } from "react-router-dom";
-import {UserContext} from "../UserContext";
+import { UserContext } from "../UserContext.js";
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
     const [error, setError] = useState('');
-    const {setUserInfo} = useContext(UserContext);
+    const { setUserInfo } = useContext(UserContext);
 
-    async function login(ev) {
+    async function login(ev: FormEvent) {
         ev.preventDefault();
         setError('');
         
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
                 method: 'POST',
-                body: JSON.stringify({username, password}),
-                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username, password }),
+                headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
             });
 
@@ -38,7 +38,7 @@ export default function LoginPage() {
         return <Navigate to={'/'} />
     }
 
-    return(
+    return (
         <form className="login" onSubmit={login}>
             <h1>Welcome Back</h1>
             {error && <div className="error-message">{error}</div>}

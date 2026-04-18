@@ -1,9 +1,12 @@
 /**
  * Shared category options for blog posts.
- * Used by CreatePost and EditPost forms.
- * Add new categories here — they will automatically appear in all forms.
  */
-const CATEGORIES = [
+interface Category {
+    value: string;
+    label: string;
+}
+
+const CATEGORIES: Category[] = [
     { value: 'Tech', label: 'Tech' },
     { value: 'Lifestyle', label: 'Lifestyle' },
     { value: 'Travel', label: 'Travel' },

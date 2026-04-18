@@ -4,7 +4,7 @@
 ![Tech Stack](https://img.shields.io/badge/Stack-MERN-blue?style=for-the-badge)
 ![UI Design](https://img.shields.io/badge/Design-Editorial--Aesthetic-indigo?style=for-the-badge)
 
-A high-performance, responsive full-stack blogging platform built with the MERN stack (MongoDB, Express, React, Node.js). This project features a modern editorial design inspired by platforms like Medium and Ghost, optimized for deep readability and professional content management.
+A high-performance, responsive full-stack blogging platform built with a modern TypeScript architecture. This project features a premium editorial design inspired by platforms like Medium and Ghost, optimized for deep readability and professional content management.
 
 ---
 
@@ -21,7 +21,9 @@ A high-performance, responsive full-stack blogging platform built with the MERN 
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack: TypeScript & ESM
+
+This project is built using a modern **TypeScript** architecture with **ES Modules (ESM)** for both the backend and frontend.
 
 ### Frontend
 - **React.js**: Functional components and Hooks (`useContext`, `useEffect`, `useRef`).
@@ -53,7 +55,10 @@ git clone https://github.com/vins254/Blog_MERN.git
 # Install backend dependencies
 npm install
 
-# Install frontend dependencies
+# Build/Run Backend (Development)
+npm run dev # Uses tsx for instant execution
+
+# Install frontend dependencies (TSX/React)
 cd client
 npm install
 ```
@@ -95,7 +100,7 @@ npm test
 ### Backend (Render)
 1. Set the root directory to `.`
 2. Set Build Command: `npm install`
-3. Set Start Command: `node api/index.js`
+3. Set Start Command: `npm start` (Runs `node api/index.js` in ESM mode)
 4. Add Environment Variables (`MONGO_URL`, `JWT_SECRET`, `CLIENT_URL`).
 
 ### Frontend (Vercel)

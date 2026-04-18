@@ -1,14 +1,15 @@
+import React from 'react';
 import './App.css';
-import Layout from "./Layout";
-import IndexPage from './pages/IndexPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import {Route, Routes} from "react-router-dom";
-import {UserContextProvider}  from './UserContext';
-import CreatePost from './pages/CreatePost';
-import PostPage from "./pages/PostPage";
-import EditPost from './pages/EditPost';
-import UserPostsPage from "./pages/UserPostsPage";
+import Layout from "./Layout.js";
+import IndexPage from './pages/IndexPage.js';
+import LoginPage from './pages/LoginPage.js';
+import RegisterPage from './pages/RegisterPage.js';
+import { Route, Routes } from "react-router-dom";
+import { UserContextProvider } from './UserContext.js';
+import CreatePost from './pages/CreatePost.js';
+import PostPage from "./pages/PostPage.js";
+import EditPost from './pages/EditPost.js';
+import UserPostsPage from "./pages/UserPostsPage.js";
 
 function App() {
   return (
