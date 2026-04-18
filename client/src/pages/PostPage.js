@@ -43,10 +43,9 @@ export default function PostPage() {
     // Robust image URL handling
     const getImageUrl = (path) => {
         if (!path) return '';
-        // Ensure we don't have double slashes if API_URL ends with one
         const baseUrl = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
         const cleanPath = path.replace(/^\/+/, "");
-        return `${baseUrl}/${cleanPath}`;
+        return `${baseUrl}/uploads/${cleanPath}`;
     };
 
     return (

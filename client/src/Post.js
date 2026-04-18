@@ -7,7 +7,7 @@ export default function Post({_id,title,summary,cover,createdAt,author,category}
         if (!path) return '';
         const baseUrl = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
         const cleanPath = path.replace(/^\/+/, "");
-        return `${baseUrl}/${cleanPath}`;
+        return `${baseUrl}/uploads/${cleanPath}`;
     };
 
     return(

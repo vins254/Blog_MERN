@@ -1,5 +1,6 @@
 const Post = require('../models/Post');
 const fs = require('fs');
+const path = require('path');
 
 /**
  * Creates a new blog post.
@@ -18,13 +19,8 @@ const createPost = async (req, res) => {
             newPath = tempPath + '.' + ext;
             fs.renameSync(tempPath, newPath);
             
-            // Store only the part relevant to the static server (uploads/...)
-            // Multer path usually looks like 'api/uploads/filename' or 'uploads/filename'
-            const relativePath = newPath.replace(/\\/g, '/'); // Normalize windows slashes
-            const uploadIndex = relativePath.indexOf('uploads/');
-            if (uploadIndex !== -1) {
-                newPath = relativePath.substring(uploadIndex);
-            }
+            // Store only the filename in the DB
+            newPath = path.basename(newPath);
         }
 
         const { title, summary, content, category } = req.body;
@@ -57,12 +53,8 @@ const updatePost = async (req, res) => {
             newPath = tempPath + '.' + ext;
             fs.renameSync(tempPath, newPath);
             
-            // Normalize path for DB
-            const relativePath = newPath.replace(/\\/g, '/');
-            const uploadIndex = relativePath.indexOf('uploads/');
-            if (uploadIndex !== -1) {
-                newPath = relativePath.substring(uploadIndex);
-            }
+            // Normalize path for DB: Store only the filename
+            newPath = path.basename(newPath);
         }
 
         const { id, title, summary, content, category } = req.body;
