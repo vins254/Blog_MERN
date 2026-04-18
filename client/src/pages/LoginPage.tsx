@@ -1,6 +1,7 @@
 import React, { useContext, useState, FormEvent } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
+import { API_URL } from "../config";
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
@@ -14,7 +15,7 @@ export default function LoginPage() {
         setError('');
         
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+            const response = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 body: JSON.stringify({ username, password }),
                 headers: { 'Content-Type': 'application/json' },

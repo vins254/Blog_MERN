@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const router = express.Router();
 const uploadMiddleware = multer({ 
     dest: path.join(__dirname, '../uploads'),
-    limits: { fieldSize: 10 * 1024 * 1024 } // 10MB limit for form fields
+    limits: { fieldSize: 50 * 1024 * 1024 } // 50MB limit for form fields (large blog posts)
 });
 
 router.get('/post', getPosts);

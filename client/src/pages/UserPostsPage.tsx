@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import Post from "../Post";
 import { UserContext } from "../UserContext";
 import type { PostData } from "./IndexPage";
+import { API_URL } from "../config";
 
 export default function UserPostsPage() {
     const [posts, setPosts] = useState<PostData[]>([]);
@@ -14,7 +15,7 @@ export default function UserPostsPage() {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch(`${process.env.REACT_APP_API_URL}/post/user/${id}`).then(response => {
+        fetch(`${API_URL}/post/user/${id}`).then(response => {
             response.json().then(posts => {
                 setPosts(posts);
                 setIsLoading(false);

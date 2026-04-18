@@ -3,6 +3,7 @@ import "react-quill/dist/quill.snow.css";
 import { Navigate } from "react-router-dom";
 import Editor from "../Editor";
 import CATEGORIES from "../constants/categories";
+import { API_URL } from "../config";
 
 export default function CreatePost() {
     const [title, setTitle] = useState('');
@@ -32,7 +33,7 @@ export default function CreatePost() {
         }
         
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/post`, {
+            const response = await fetch(`${API_URL}/post`, {
                 method: 'POST',
                 body: data,
                 credentials: 'include',

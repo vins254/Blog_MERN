@@ -3,6 +3,7 @@ import { formatISO9075 } from "date-fns";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import type { PostData } from "./IndexPage";
+import { API_URL } from "../config";
 
 export default function PostPage() {
     const [postInfo, setPostInfo] = useState<PostData | null>(null);
@@ -11,7 +12,7 @@ export default function PostPage() {
     const [deleteRedirect, setDeleteRedirect] = useState(false);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/post/${id}`)
+        fetch(`${API_URL}/post/${id}`)
             .then(response => {
                 response.json().then(postInfo => {
                     setPostInfo(postInfo);
@@ -23,8 +24,8 @@ export default function PostPage() {
         if (!window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
             return;
         }
-
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/post/${id}`, {
+        
+        const response = await fetch(`${API_URL}/post/${id}`, {
             method: 'DELETE',
             credentials: 'include',
         });
@@ -43,10 +44,8 @@ export default function PostPage() {
     // Robust image URL handling
     const getImageUrl = (path: string) => {
         if (!path) return '';
-        const envUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-        const baseUrl = envUrl.replace(/\/+$/, "");
         const cleanPath = path.replace(/^\/+/, "");
-        return `${baseUrl}/uploads/${cleanPath}`;
+        return `${API_URL}/uploads/${cleanPath}`;
     };
 
     return (

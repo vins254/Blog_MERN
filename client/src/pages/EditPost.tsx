@@ -2,6 +2,7 @@ import React, { useEffect, useState, FormEvent } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import Editor from "../Editor";
 import CATEGORIES from "../constants/categories";
+import { API_URL } from "../config";
 
 export default function EditPost() {
     const { id } = useParams<{ id: string }>();
@@ -16,7 +17,7 @@ export default function EditPost() {
 
     useEffect(() => {
         if (id) {
-            fetch(`${process.env.REACT_APP_API_URL}/post/` + id)
+            fetch(`${API_URL}/post/` + id)
                 .then(response => {
                     response.json().then(postInfo => {
                         setTitle(postInfo.title);
@@ -43,7 +44,7 @@ export default function EditPost() {
         setError('');
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/post`, {
+            const response = await fetch(`${API_URL}/post`, {
                 method: 'PUT',
                 body: data,
                 credentials: 'include',

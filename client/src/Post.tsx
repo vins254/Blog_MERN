@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
+import { API_URL } from "./config";
 
 interface PostProps {
     _id: string;
@@ -18,10 +19,8 @@ export default function Post({ _id, title, summary, cover, createdAt, author, ca
     // Robust image URL handling
     const getImageUrl = (path: string) => {
         if (!path) return '';
-        const envUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-        const baseUrl = envUrl.replace(/\/+$/, "");
         const cleanPath = path.replace(/^\/+/, "");
-        return `${baseUrl}/uploads/${cleanPath}`;
+        return `${API_URL}/uploads/${cleanPath}`;
     };
 
     return (

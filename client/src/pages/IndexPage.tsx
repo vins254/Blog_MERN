@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import Post from "../Post";
 import { UserContext } from "../UserContext";
+import { API_URL } from "../config";
 
 export interface PostData {
     _id: string;
@@ -23,7 +24,7 @@ export default function IndexPage() {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch(`${process.env.REACT_APP_API_URL}/post`)
+        fetch(`${API_URL}/post`)
             .then(response => response.json())
             .then(posts => {
                 setPosts(posts);

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import { API_URL } from "./config";
 
 export default function Header() {
     const { setUserInfo, userInfo, searchQuery, setSearchQuery, theme, setTheme } = useContext(UserContext);
@@ -10,7 +11,7 @@ export default function Header() {
     const location = useLocation();
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/profile`, {
+        fetch(`${API_URL}/profile`, {
             credentials: 'include',
         }).then(response => {
             if (response.ok) {
@@ -39,7 +40,7 @@ export default function Header() {
     }, [location]);
 
     function logout() {
-        fetch(`${process.env.REACT_APP_API_URL}/logout`, {
+        fetch(`${API_URL}/logout`, {
             credentials: 'include',
             method: 'POST',
         });

@@ -59,6 +59,15 @@ app.get("/", (req, res) => {
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.error('Unhandled Server Error:', err);
+
+    // Handle Multer errors (like 'Field value too long')
+    if (err.name === 'MulterError') {
+        return res.status(413).json({
+            message: `Upload error: ${err.message}`,
+            code: err.code
+        });
+    }
+
     res.status(err.status || 500).json({
         message: err.message || 'Internal Server Error',
         error: process.env.NODE_ENV === 'development' ? err : {}

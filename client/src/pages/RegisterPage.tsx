@@ -1,5 +1,6 @@
 import React, { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../config";
 
 /**
  * RegisterPage Component
@@ -51,7 +52,7 @@ export default function RegisterPage() {
             return;
         }
 
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
+        const response = await fetch(`${API_URL}/register`, {
             method: 'POST',
             body: JSON.stringify({ username, email, password, confirmPassword }),
             headers: { 'Content-Type': 'application/json' },
