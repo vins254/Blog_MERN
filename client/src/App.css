@@ -708,17 +708,24 @@ input:focus + .input-hint, .input-hint.visible {
 
   .hamburger-menu {
     display: block !important;
-    background: none;
+    background: transparent !important; /* Force removal of global button background */
     border: none;
-    color: var(--text-muted);
+    color: var(--text-main);
     cursor: pointer;
-    padding: 4px;
+    padding: 8px;
     z-index: 101;
+    margin-left: auto; /* Push to the right corner */
+    width: auto; /* Reset global button width */
+  }
+
+  .hamburger-menu:hover {
+    transform: none; /* Disable global button hover transform */
+    color: var(--primary);
   }
 
   .hamburger-menu svg {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
   }
 
   header nav {
@@ -783,6 +790,12 @@ input:focus + .input-hint, .input-hint.visible {
 
   header .search-bar {
     display: none; /* Hide search on very small screens for space */
+  }
+
+  /* Ensure main content doesn't overflow */
+  main {
+    padding: 16px;
+    overflow-x: hidden;
   }
 
   .post-banner img {
