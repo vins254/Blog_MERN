@@ -3,6 +3,11 @@
  * Manages user lifecycle operations including registration, login, and session management.
  */
 
+import bcrypt from 'bcryptjs';
+import User from '../models/User.js';
+import jwt from 'jsonwebtoken';
+import { Request, Response } from 'express';
+
 const salt = bcrypt.genSaltSync(10);
 const secret = process.env.JWT_SECRET || 'secret123';
 
