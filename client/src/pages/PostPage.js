@@ -65,7 +65,7 @@ export default function PostPage() {
             <div className="post-meta">
                 <div className="author-info">
                     <div className="author-avatar">{postInfo.author.username[0].toUpperCase()}</div>
-                    <span>by @{postInfo.author.username}</span>
+                    <span>created by @ {postInfo.author.username}</span>
                 </div>
                 <time>{formatISO9075(new Date(postInfo.createdAt))}</time>
             </div>

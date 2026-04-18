@@ -551,10 +551,30 @@ input:focus + .input-hint, .input-hint.visible {
   font-weight: 500;
 }
 
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: var(--shadow-sm);
+}
+
 .edit-row {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
   margin-bottom: 40px;
 }
 
