@@ -630,6 +630,29 @@ input:focus + .input-hint, .input-hint.visible {
   background-color: rgba(0,0,0,0.02);
 }
 
+/* Post Content Typography & Media */
+.content {
+  font-size: 1.15rem;
+  line-height: 1.8;
+}
+
+.content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 32px 0;
+  display: block;
+  box-shadow: var(--shadow);
+}
+
+.content p {
+  margin-bottom: 24px;
+}
+
+.content h2, .content h3 {
+  margin: 40px 0 20px;
+}
+
 /* Loading States */
 .loading-container {
   display: flex;
