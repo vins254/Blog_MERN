@@ -6,7 +6,7 @@
   "main": "api/index.ts",
   "license": "MIT",
   "scripts": {
-    "start": "node api/index.ts",
+    "start": "tsx api/index.ts",
     "dev": "tsx watch api/index.ts",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --detectOpenHandles"
   },
@@ -38,7 +38,8 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.2",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -52,7 +53,6 @@
     "nodemon": "^3.1.11",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.9",
-    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }
