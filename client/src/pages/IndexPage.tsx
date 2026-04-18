@@ -25,12 +25,18 @@ export default function IndexPage() {
     useEffect(() => {
         setIsLoading(true);
         fetch(`${API_URL}/post`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to fetch posts');
+                return response.json();
+            })
             .then(posts => {
                 setPosts(posts);
                 setIsLoading(false);
             })
-            .catch(() => setIsLoading(false));
+            .catch(err => {
+                console.error("Index fetch error:", err);
+                setIsLoading(false);
+            });
     }, []);
 
     const filteredPosts = posts.filter(post => 

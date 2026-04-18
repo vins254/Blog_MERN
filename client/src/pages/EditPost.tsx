@@ -19,12 +19,18 @@ export default function EditPost() {
         if (id) {
             fetch(`${API_URL}/post/` + id)
                 .then(response => {
-                    response.json().then(postInfo => {
-                        setTitle(postInfo.title);
-                        setContent(postInfo.content);
-                        setSummary(postInfo.summary);
-                        setCategory(postInfo.category || 'Other');
-                    });
+                    if (!response.ok) throw new Error('Failed to fetch post data');
+                    return response.json();
+                })
+                .then(postInfo => {
+                    setTitle(postInfo.title);
+                    setContent(postInfo.content);
+                    setSummary(postInfo.summary);
+                    setCategory(postInfo.category || 'Other');
+                })
+                .catch(err => {
+                    console.error('Edit fetch error:', err);
+                    setError('Failed to load post data');
                 });
         }
     }, [id]);
