@@ -8,23 +8,23 @@ This document provides a comprehensive guide to the **Modern MERN Blog** archite
 
 ### Core Principles
 - **Separation of Concerns**: Business logic is isolated in `controllers`, while HTTP routing is handled in `routes`.
-- **Testability**: The Express `app` is separated from the server `index.js` to allow `supertest` to run without a live port.
+- **TypeScript Support**: Full static typing across the entire stack for increased reliability and developer productivity.
+- **Testability**: The Express `app` is separated from the server `index.ts` to allow `supertest` to run without a live port.
 - **RESTful API**: Clean, predictable endpoints for all CRUD operations.
 
-### Backend Structure (`api/`)
-- `app.js`: Express configuration, middleware setup, and DB connection.
-- `index.js`: Server entry point.
-- `controllers/`: Request handlers (Validates input, interacts with models).
-- `models/`: Mongoose schemas for `User` and `Post`.
+### Backend Structure (`api/`) - TypeScript ESM
+- `app.ts`: Express configuration, middleware setup, and DB connection.
+- `index.ts`: Server entry point.
+- `controllers/`: Typed request handlers.
+- `models/`: Mongoose schemas with TypeScript interfaces.
 - `routes/`: Endpoint definitions.
-- `__tests__/`: Automated test suites.
 
-### Frontend Structure (`client/`)
-- `src/App.js`: Routing and main layout logic.
-- `src/components/`: Reusable UI elements (Header, Post, Editor).
-- `src/pages/`: Page-level components.
-- `src/constants/`: Centralized configuration (e.g., categories).
-- `src/App.test.js`: React Testing Library integration tests.
+### Frontend Structure (`client/src/`) - React TSX
+- `App.tsx`: Routing and main layout logic.
+- `Editor.tsx`, `Header.tsx`, `Post.tsx`: Typed UI components.
+- `pages/`: Typed page-level components (.tsx).
+- `constants/`: Shared constants (.ts).
+- `UserContext.tsx`: Typed Global Context for user sessions and theme.
 
 ---
 
@@ -63,8 +63,8 @@ The project uses a dual-layer testing strategy to ensure reliability.
     - `MONGO_URL`: Your Atlas connection string.
     - `JWT_SECRET`: Random secure string.
     - `CLIENT_URL`: Your Vercel frontend URL.
-5. **Build Command**: `npm install`
-6. **Start Command**: `node index.js`
+5. **Build Command**: `npm install` (Backend runs directly from `.ts` using `tsx` in dev or standard `.js` entry in prod via ESM).
+6. **Start Command**: `npm start`
 
 ### Frontend: Vercel
 1. Create a new Project on Vercel.
@@ -89,6 +89,6 @@ If you encounter "Server Connection Error" during login or post creation when de
 
 ## 🛠️ Contributor Follow-up
 If you are taking over this project:
-1. **Cleanup**: Existing uploaded files are ignored by git; create an `api/uploads/` folder if it doesn't exist.
-2. **Category Management**: To add new categories, update `client/src/constants/categories.js`.
-3. **Password Rules**: Adjust registration validation in `api/controllers/authController.js`.
+1. **Cleanup**: create an `api/uploads/` folder if it doesn't exist.
+2. **Category Management**: To add new categories, update `client/src/constants/categories.ts`.
+3. **Password Rules**: Adjust registration validation in `client/src/pages/RegisterPage.tsx`.
