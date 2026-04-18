@@ -1,8 +1,8 @@
 import React, { useState, FormEvent } from "react";
 import "react-quill/dist/quill.snow.css";
 import { Navigate } from "react-router-dom";
-import Editor from "../Editor.js";
-import CATEGORIES from "../constants/categories.js";
+import Editor from "../Editor";
+import CATEGORIES from "../constants/categories";
 
 export default function CreatePost() {
     const [title, setTitle] = useState('');

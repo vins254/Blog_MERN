@@ -1,7 +1,7 @@
 import React, { useEffect, useState, FormEvent } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import Editor from "../Editor.js";
-import CATEGORIES from "../constants/categories.js";
+import Editor from "../Editor";
+import CATEGORIES from "../constants/categories";
 
 export default function EditPost() {
     const { id } = useParams<{ id: string }>();

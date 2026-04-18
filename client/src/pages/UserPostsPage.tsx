@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import Post from "../Post.js";
-import { UserContext } from "../UserContext.js";
-import { PostData } from "./IndexPage.js";
+import Post from "../Post";
+import { UserContext } from "../UserContext";
+import { PostData } from "./IndexPage";
 
 export default function UserPostsPage() {
     const [posts, setPosts] = useState<PostData[]>([]);
