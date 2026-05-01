@@ -75,10 +75,11 @@ The application follows a standard Full-Stack MERN architecture:
 -   **Responsive Nav**: Built a dedicated mobile slide-out menu with flat links for easier accessibility.
 
 ### Phase 4: Tailwind CSS Migration (Utility-First)
--   **Architecture**: Replaced the monolith `App.css` file with a **Tailwind CSS** configuration.
--   **Design Tokens**: Extended the Tailwind theme with custom "Paper & Ink" colors, "Lora/Inter" typography, and custom shadows.
--   **Code Quality**: Migrated all React components to use functional utility classes, reducing the overall CSS bundle size and improving maintainability.
--   **Dark Mode**: Integrated Tailwind's `dark:` variant with the existing theme toggler via the `document.documentElement` class list.
+-   **Architecture**: Replaced the monolith `App.css` file with a **Tailwind CSS v3** configuration for maximum compatibility with Create React App.
+-   **Design Tokens**: Extended the Tailwind theme with custom "Paper & Ink" colors mapped to **CSS Variables** (`--ink`, `--paper`), enabling instant, flick-free theme switching.
+-   **Header Layout**: Implemented a **3-Zone Professional Header** (Brand, Search, Actions) that prevents overlapping and ensures action icons (Theme Toggle, User Menu) are always accessible.
+-   **Mobile UX**: Replaced absolute positioning in the mobile navigation with **CSS Transforms** (`translate-x`) to eliminate horizontal scrolling issues and improve performance.
+-   **Dark Mode**: Integrated a native class-based dark mode that persists in `localStorage` and respects user system preferences.
 
 ---
 

@@ -1,8 +1,6 @@
 # 🖋️ MERN Blog: A Premium Editorial Platform
 
-![Platform Preview](https://img.shields.io/badge/Status-Deployment--Ready-success?style=for-the-badge)
-![Tech Stack](https://img.shields.io/badge/Stack-MERN-blue?style=for-the-badge)
-![TypeScript](https://img.shields.io/badge/Language-TypeScript-blue?logo=typescript&logoColor=white&style=for-the-badge)
+![Platform Preview](./screenshot/myblogs.png)
 
 A high-performance, responsive full-stack blogging platform built with a modern TypeScript architecture. This project features a premium editorial design inspired by platforms like Medium and Ghost, optimized for readability and professional content management.
 
