@@ -22,6 +22,7 @@ export default function Editor({ value, onChange }: EditorProps) {
             value={value} 
             theme={'snow'}
             onChange={onChange}
-            modules={modules} />
+            modules={modules}
+            className="bg-surface text-ink font-sans" />
     );
 }

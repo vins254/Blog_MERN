@@ -47,9 +47,9 @@ export default function IndexPage() {
 
     if (isLoading) {
         return (
-            <div className="loading-container">
-                <div className="loader"></div>
-                <p>Curating stories for you...</p>
+            <div className="flex flex-col items-center justify-center py-20 text-ink-faint gap-4">
+                <div className="w-7 h-7 border-2 border-border-custom border-t-ink rounded-full animate-spin"></div>
+                <p className="text-[0.9rem]">Curating stories for you...</p>
             </div>
         );
     }
@@ -57,13 +57,13 @@ export default function IndexPage() {
     return (
         <>
             {filteredPosts.length > 0 ? (
-                <div className="posts-container">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 pt-2">
                     {filteredPosts.map(post => (
                         <Post key={post._id} {...post} />
                     ))}
                 </div>
             ) : (
-                <div className="no-results">
+                <div className="text-center text-ink-faint py-15 text-base">
                     {searchQuery ? `No posts found matching "${searchQuery}"` : "No posts available at the moment."}
                 </div>
             )}

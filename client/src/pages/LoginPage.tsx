@@ -45,28 +45,51 @@ export default function LoginPage() {
     }
 
     return (
-        <form className="login" onSubmit={login}>
-            <h1>Welcome Back</h1>
-            {error && <div className="error-message">{error}</div>}
-            
-            <input type="text" 
-                    name="username"
-                    autoComplete="username"
-                    placeholder="Username" 
-                    value={username}
-                    onChange={ev => setUsername(ev.target.value)}/>
-            <input type="password" 
-                    name="password"
-                    autoComplete="current-password"
-                    placeholder="Password" 
-                    value={password}
-                    onChange={ev => setPassword(ev.target.value)}/>
-            <button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Signing In...' : 'Sign In'}
-            </button>
-            <div className="auth-switch">
-                Don't have an account? <Link to="/register">Sign up here</Link>
-            </div>
-        </form>
+        <div className="flex items-center justify-center min-h-[calc(100vh-60px)] px-4">
+            <form className="w-full max-w-[440px] bg-surface p-10 sm:p-12 rounded-xl shadow-lg border border-border-custom" onSubmit={login}>
+                <h1 className="text-3xl font-bold font-serif text-center mb-8 text-ink">Welcome Back</h1>
+                
+                {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-600 p-3.5 rounded-lg text-[0.875rem] font-medium text-center mb-6 animate-in fade-in duration-200">
+                        {error}
+                    </div>
+                )}
+                
+                <div className="space-y-4">
+                    <input 
+                        type="text" 
+                        name="username"
+                        autoComplete="username"
+                        placeholder="Username" 
+                        className="w-full p-3.5 bg-paper-warm border border-border-custom rounded-lg font-sans text-base text-ink outline-none transition-all focus:border-ink-light focus:bg-surface focus:shadow-xs"
+                        value={username}
+                        onChange={ev => setUsername(ev.target.value)}
+                        required
+                    />
+                    <input 
+                        type="password" 
+                        name="password"
+                        autoComplete="current-password"
+                        placeholder="Password" 
+                        className="w-full p-3.5 bg-paper-warm border border-border-custom rounded-lg font-sans text-base text-ink outline-none transition-all focus:border-ink-light focus:bg-surface focus:shadow-xs"
+                        value={password}
+                        onChange={ev => setPassword(ev.target.value)}
+                        required
+                    />
+                </div>
+
+                <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full mt-8 p-3.5 bg-ink text-paper rounded-lg font-sans text-base font-semibold border-none cursor-pointer transition-all hover:bg-accent disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                    {isSubmitting ? 'Signing In...' : 'Sign In'}
+                </button>
+
+                <div className="mt-8 text-center font-sans text-[0.875rem] text-ink-light">
+                    Don't have an account? <Link to="/register" className="text-accent font-semibold no-underline hover:underline">Sign up here</Link>
+                </div>
+            </form>
+        </div>
     );
 }
