@@ -1,6 +1,6 @@
 /**
  * FILE: client/src/Header.tsx
- * PURPOSE: Global navigation with professional layout and theme-aware actions.
+ * PURPOSE: Global navigation with strict responsive visibility rules.
  */
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ export default function Header() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Close dropdown when clicking outside
+    // Close dropdowns when clicking outside
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -30,6 +30,7 @@ export default function Header() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    // Reset navigation state on route change
     useEffect(() => {
         setIsDropdownOpen(false);
         setIsNavOpen(false);
@@ -59,7 +60,7 @@ export default function Header() {
                 </Link>
             </div>
 
-            {/* 2. SEARCH (Center - hidden on XS mobile) */}
+            {/* 2. SEARCH (Center - Desktop Only) */}
             {showSearch && (
                 <div className="hidden sm:flex flex-[2] max-w-[400px] items-center justify-center px-4">
                     <div className="w-full flex items-center gap-2 bg-paper-warm border border-border-custom rounded-full px-4 py-1.5 transition-all focus-within:border-ink-light focus-within:bg-surface focus-within:shadow-sm">
@@ -83,7 +84,7 @@ export default function Header() {
                 {/* Theme Toggle - Desktop & Mobile */}
                 <button 
                     onClick={toggleTheme}
-                    className="w-9 h-9 flex items-center justify-center rounded-full text-ink-light hover:text-ink hover:bg-paper-warm border border-transparent hover:border-border-custom transition-all"
+                    className="w-9 h-9 flex items-center justify-center rounded-full text-ink-light hover:text-ink hover:bg-paper-warm border border-transparent hover:border-border-custom transition-all outline-none"
                     title="Toggle Mode"
                 >
                     {theme === 'light' ? (
@@ -97,11 +98,11 @@ export default function Header() {
                     )}
                 </button>
 
-                {/* User Dropdown - Desktop */}
+                {/* User Dropdown - Desktop ONLY */}
                 <div className="hidden md:block relative" ref={dropdownRef}>
                     <button 
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="flex items-center gap-2 border border-border-custom rounded-full p-[3px_12px_3px_3px] text-ink-light hover:text-ink hover:border-border-dark transition-all bg-surface/50"
+                        className="flex items-center gap-2 border border-border-custom rounded-full p-[3px_12px_3px_3px] text-ink-light hover:text-ink hover:border-border-dark transition-all bg-surface/50 outline-none"
                     >
                         <div className="w-7 h-7 bg-ink text-paper rounded-full flex items-center justify-center shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -117,7 +118,7 @@ export default function Header() {
                                 <>
                                     <Link to={`/posts/user/${userInfo.id}`} className="p-2.5 rounded-lg text-sm text-ink hover:bg-paper-warm hover:text-accent no-underline">My Blogs</Link>
                                     <Link to="/create" className="p-2.5 rounded-lg text-sm text-ink hover:bg-paper-warm hover:text-accent no-underline">Create Post</Link>
-                                    <button onClick={logout} className="w-full text-left p-2.5 mt-1 border-t border-border-custom text-sm font-medium text-accent hover:bg-red-50 rounded-b-lg">Logout</button>
+                                    <button onClick={logout} className="w-full text-left p-2.5 mt-1 border-t border-border-custom text-sm font-medium text-accent hover:bg-red-50 rounded-b-lg cursor-pointer">Logout</button>
                                 </>
                             ) : (
                                 <>
@@ -129,9 +130,9 @@ export default function Header() {
                     )}
                 </div>
 
-                {/* Hamburger - Mobile Only */}
+                {/* Hamburger Button - Mobile ONLY */}
                 <button 
-                    className="hamburger-menu md:hidden w-10 h-10 flex items-center justify-center text-ink hover:bg-paper-warm rounded-full transition-colors"
+                    className="hamburger-menu md:hidden w-10 h-10 flex items-center justify-center text-ink hover:bg-paper-warm rounded-full transition-colors outline-none"
                     onClick={() => setIsNavOpen(!isNavOpen)}
                 >
                     {isNavOpen ? (
@@ -146,8 +147,11 @@ export default function Header() {
                 </button>
             </div>
 
-            {/* Mobile Drawer */}
-            <nav ref={navRef} className={`fixed top-0 right-0 w-72 h-screen bg-surface border-l border-border-custom flex flex-col p-8 z-[200] shadow-2xl transform transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            {/* Mobile Sidebar - Hidden on Desktop Screens */}
+            <nav 
+                ref={navRef} 
+                className={`fixed top-0 right-0 w-72 h-screen bg-surface border-l border-border-custom flex flex-col p-8 z-[200] shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden ${isNavOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            >
                 <div className="flex flex-col gap-4 mt-8">
                     {username ? (
                         <>
@@ -159,7 +163,7 @@ export default function Header() {
                             </div>
                             <Link to={`/posts/user/${userInfo.id}`} className="text-lg font-medium text-ink hover:text-accent no-underline py-2">My Blogs</Link>
                             <Link to="/create" className="text-lg font-medium text-ink hover:text-accent no-underline py-2">Create Post</Link>
-                            <button onClick={logout} className="w-full text-left text-lg font-bold text-accent py-2 mt-4 border-t border-border-custom">Logout</button>
+                            <button onClick={logout} className="w-full text-left text-lg font-bold text-accent py-2 mt-4 border-t border-border-custom cursor-pointer">Logout</button>
                         </>
                     ) : (
                         <>
