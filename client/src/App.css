@@ -739,30 +739,34 @@ div.post p.summary {
 }
 
 .edit-action-btn, .delete-action-btn {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  width: 40px;
+  width: 40px !important;
   height: 40px;
   border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--ink-light);
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--ink-light) !important;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s;
+  padding: 0 !important;
+  font-size: inherit;
 }
 
 .edit-action-btn:hover {
-  border-color: var(--ink);
-  color: var(--ink);
-  background: var(--paper-warm);
+  border-color: var(--ink) !important;
+  color: var(--ink) !important;
+  background: var(--paper-warm) !important;
+  transform: none;
 }
 
 .delete-action-btn:hover {
-  border-color: #c0392b;
-  color: #c0392b;
-  background: #fff5f5;
+  border-color: #c0392b !important;
+  color: #c0392b !important;
+  background: #fff5f5 !important;
+  transform: none;
 }
 
 .edit-action-btn svg, .delete-action-btn svg { width: 17px; height: 17px; }
