@@ -58,7 +58,9 @@ app.use('/uploads', express.static(UPLOADS_PATH)); // Serve uploaded images as s
 async function connectDB() {
     try {
         if (!process.env.MONGO_URL) throw new Error("MONGO_URL not found");
-        await mongoose.connect(process.env.MONGO_URL);
+        await mongoose.connect(process.env.MONGO_URL, {
+            serverSelectionTimeoutMS: 5000,
+        });
         console.log("MongoDB connected");
     } catch (error) {
         console.error("MongoDB connection error", error);

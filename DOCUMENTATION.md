@@ -83,6 +83,39 @@ The project maintains a healthy test suite using **Jest** and **Supertest** for 
 
 ---
 
+## ⚠️ Error Handling & User Feedback
+
+The project follows a "Fail-Fast & Feedback-First" philosophy to ensure users are never left wondering what went wrong.
+
+### 1. Backend: Centralized Error Middleware
+All server-side errors are funneled through a global error handler in `api/app.ts`. 
+-   **Structure**: Every error response returns a consistent JSON object: `{ "message": "User-friendly description", "error": {} }`.
+-   **Multer Errors**: Specific handling for file upload issues (e.g., file too large) returns a `413 Payload Too Large` status.
+-   **Database Errors**: Mongoose connection timeouts are caught early to prevent hanging requests.
+
+### 2. Frontend: State-Driven UI Feedback
+Each form component (Login, Register, Create Post) manages an internal `error` state.
+-   **Try/Catch Pattern**: Fetch calls are wrapped in try/catch blocks to handle network failures (e.g., server offline).
+-   **Display**: Errors are rendered in a dedicated `.error-message` component at the top of forms. This component uses high-contrast colors (Red/Pink) to grab attention.
+-   **Loading Indicators**: Submit buttons change their text (e.g., "Signing In...") and become disabled during API calls to prevent duplicate submissions and provide immediate visual confirmation.
+
+### 3. Best Practices for Clear Communication
+-   **Validation Errors**: Instead of "Invalid Input", the app tells the user exactly what is wrong (e.g., "Passwords do not match").
+-   **Connectivity Issues**: If the backend is unreachable, the frontend displays "Server connection error. Please check your internet or if the server is running."
+-   **Ownership Checks**: If a user tries to edit a post they don't own, the server returns a `403 Forbidden`, and the UI prevents the action.
+
+## 🛠️ Project Initialization & Seeding
+
+To ensure the demo credentials work immediately, you can seed the database:
+1.  **Whitelist your IP** in MongoDB Atlas (as described in Troubleshooting).
+2.  Run the following command from the project root:
+    ```bash
+    npm run seed
+    ```
+    This will create a user with **Username: `demo`** and **Password: `demo123`** if it doesn't already exist.
+
+---
+
 ## 🚀 Deployment Checklist
 1.  **Backend (Render)**: Set `MONGO_URL`, `JWT_SECRET`, and `CLIENT_URL`.
 2.  **Frontend (Vercel)**: Set `REACT_APP_API_URL`.

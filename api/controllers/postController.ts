@@ -66,13 +66,13 @@ export const updatePost = async (req: AuthRequest, res: Response) => {
         const { id, title, summary, content, category } = req.body;
         const postDoc: any = await Post.findById(id);
         if (!postDoc) {
-            return res.status(404).json('post not found');
+            return res.status(404).json({ message: 'Post not found' });
         }
 
         // Ownership Check: Ensure stringified IDs match
         const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user?.id);
         if (!isAuthor) {
-            return res.status(403).json('you are not the author');
+            return res.status(403).json({ message: 'You are not the author of this post' });
         }
         
         // Update fields
@@ -112,10 +112,10 @@ export const getPost = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     try {
         const postDoc = await Post.findById(id).populate('author', ['username']);
-        if (!postDoc) return res.status(404).json('post not found');
+        if (!postDoc) return res.status(404).json({ message: 'Post not found' });
         res.json(postDoc);
     } catch (e) {
-        res.status(400).json('invalid id');
+        res.status(400).json({ message: 'Invalid post ID' });
     }
 };
 
@@ -127,12 +127,12 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     try {
         const postDoc: any = await Post.findById(id);
-        if (!postDoc) return res.status(404).json('post not found');
+        if (!postDoc) return res.status(404).json({ message: 'Post not found' });
 
         // Security check: Only the author can delete their post
         const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user?.id);
         if (!isAuthor) {
-            return res.status(403).json('you are not the author');
+            return res.status(403).json({ message: 'You are not the author of this post' });
         }
 
         // Clean up linked asset if it exists
@@ -144,9 +144,9 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
         }
 
         await postDoc.deleteOne();
-        res.json('ok');
+        res.json({ message: 'Post deleted successfully' });
     } catch (e) {
-        res.status(400).json('invalid id or server error');
+        res.status(400).json({ message: 'Invalid ID or server error' });
     }
 };
 
@@ -161,6 +161,6 @@ export const getUserPosts = async (req: AuthRequest, res: Response) => {
             .sort({ createdAt: -1 });
         res.json(posts);
     } catch (e) {
-        res.status(400).json('Error fetching user posts');
+        res.status(400).json({ message: 'Error fetching user posts' });
     }
 };

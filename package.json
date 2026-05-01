@@ -8,6 +8,7 @@
   "scripts": {
     "start": "tsx api/index.ts",
     "dev": "tsx watch api/index.ts",
+    "seed": "tsx api/seed.ts",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --detectOpenHandles"
   },
   "jest": {

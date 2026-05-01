@@ -63,7 +63,7 @@ export const register = async (req: Request, res: Response) => {
             const field = Object.keys(e.keyValue)[0];
             return res.status(400).json({ message: `${field} already exists` });
         }
-        res.status(400).json(e);
+        res.status(400).json({ message: 'Registration failed. Please try again.' });
     }
 };
 
@@ -125,5 +125,5 @@ export const logout = (req: Request, res: Response) => {
         sameSite: 'none',
         secure: true,
         expires: new Date(0) // Expire immediately
-    }).json('ok');
+    }).json({ message: 'Logged out successfully' });
 };
