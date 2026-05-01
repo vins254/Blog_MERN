@@ -13,6 +13,7 @@ export default function RegisterPage() {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
     function getPasswordStrength(pass: string) {
@@ -52,18 +53,25 @@ export default function RegisterPage() {
             return;
         }
 
-        const response = await fetch(`${API_URL}/register`, {
-            method: 'POST',
-            body: JSON.stringify({ username, email, password, confirmPassword }),
-            headers: { 'Content-Type': 'application/json' },
-        });
+        setIsSubmitting(true);
+        try {
+            const response = await fetch(`${API_URL}/register`, {
+                method: 'POST',
+                body: JSON.stringify({ username, email, password, confirmPassword }),
+                headers: { 'Content-Type': 'application/json' },
+            });
 
-        if (response.status === 200) {
-            alert("Registration successful! Redirecting to login...");
-            navigate('/login');
-        } else {
-            const data = await response.json();
-            setError(data.message || 'Registration failed');
+            if (response.status === 200) {
+                alert("Registration successful! Redirecting to login...");
+                navigate('/login');
+            } else {
+                const data = await response.json();
+                setError(data.message || 'Registration failed');
+            }
+        } catch (e) {
+            setError('Server connection error. Please try again.');
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -131,7 +139,9 @@ export default function RegisterPage() {
                 </button>
             </div>
             
-            <button type="submit">Sign Up</button>
+            <button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating Account...' : 'Sign Up'}
+            </button>
             <div className="auth-switch">
                 Already have an account? <Link to="/login">Login here</Link>
             </div>

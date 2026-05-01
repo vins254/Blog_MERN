@@ -8,11 +8,14 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const { setUserInfo } = useContext(UserContext);
 
     async function login(ev: FormEvent) {
         ev.preventDefault();
         setError('');
+        
+        setIsSubmitting(true);
         
         try {
             const response = await fetch(`${API_URL}/login`, {
@@ -32,6 +35,8 @@ export default function LoginPage() {
             }
         } catch (e) {
             setError('Server connection error. Please try again.');
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -56,7 +61,9 @@ export default function LoginPage() {
                     placeholder="Password" 
                     value={password}
                     onChange={ev => setPassword(ev.target.value)}/>
-            <button type="submit">Sign In</button>
+            <button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Signing In...' : 'Sign In'}
+            </button>
             <div className="auth-switch">
                 Don't have an account? <Link to="/register">Sign up here</Link>
             </div>

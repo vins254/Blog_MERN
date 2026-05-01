@@ -20,16 +20,18 @@ function App() {
   return (
     <UserContextProvider>
         <Routes>
-          {/* Main Layout wrapper provides Header/Footer for all child routes */}
+          {/* Main Layout wrapper provides Header for shared routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<IndexPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
             <Route path="/create" element={<CreatePost />} />
             <Route path="/post/:id" element={<PostPage />} />
             <Route path="/edit/:id" element={<EditPost />} />
             <Route path="/posts/user/:id" element={<UserPostsPage />} />
           </Route>
+
+          {/* Auth routes on their own without the global Header */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes> 
     </UserContextProvider>
     

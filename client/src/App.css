@@ -439,6 +439,13 @@ button:hover {
   transform: translateY(-1px);
 }
 
+button:disabled {
+  background-color: var(--border);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
 .error-message {
   color: #ef4444;
   font-size: 0.85rem;
