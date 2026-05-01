@@ -91,36 +91,36 @@ export default function Header() {
                         )}
                     </span>
 
-                    {username ? (
-                        <>
-                            <Link to={`/posts/user/${userInfo.id}`} className="nav-link">My Blogs</Link>
-                            <Link to="/create" className="create-post-link">Create Post</Link>
-                            <div className="user-menu-container" ref={dropdownRef}>
-                                <button className="user-menu-trigger" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                                    <div className="user-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                            <path fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12c0 2.622 1.037 5.003 2.716 6.747l.15.156c.394.394.58.907.436 1.453l-.407 1.545c-.073.277.21.503.456.347l1.393-.889a1.071 1.071 0 011.106-.015c1.411.75 3.039 1.177 4.76 1.177 1.442 0 2.8-.297 4.03-.833a1.069 1.069 0 011.056.094l1.393.889c.245.156.529-.07.456-.347l-.407-1.545c-.144-.546.042-1.059.436-1.453l.15-.156zM12 6a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 6z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <span className="username-display">{username}</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`chevron-icon ${isDropdownOpen ? 'rotate' : ''}`} style={{ width: '12px', height: '12px', transition: 'transform 0.2s' }}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                    </svg>
-                                </button>
-                                
-                                {isDropdownOpen && (
-                                    <div className="user-dropdown">
+                    <div className="user-menu-container" ref={dropdownRef}>
+                        <button className="user-menu-trigger" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                            <div className="user-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12c0 2.622 1.037 5.003 2.716 6.747l.15.156c.394.394.58.907.436 1.453l-.407 1.545c-.073.277.21.503.456.347l1.393-.889a1.071 1.071 0 011.106-.015c1.411.75 3.039 1.177 4.76 1.177 1.442 0 2.8-.297 4.03-.833a1.069 1.069 0 011.056.094l1.393.889c.245.156.529-.07.456-.347l-.407-1.545c-.144-.546.042-1.059.436-1.453l.15-.156zM12 6a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 6z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <span className="username-display">{username || 'Account'}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`chevron-icon ${isDropdownOpen ? 'rotate' : ''}`} style={{ width: '12px', height: '12px', transition: 'transform 0.2s' }}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </button>
+                        
+                        {isDropdownOpen && (
+                            <div className="user-dropdown">
+                                {username ? (
+                                    <>
+                                        <Link to={`/posts/user/${userInfo.id}`} className="dropdown-item">My Blogs</Link>
+                                        <Link to="/create" className="dropdown-item">Create Post</Link>
                                         <button type="button" onClick={logout} className="logout-btn">Logout</button>
-                                    </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link to="/login" className="dropdown-item">Login</Link>
+                                        <Link to="/register" className="dropdown-item">Register</Link>
+                                    </>
                                 )}
                             </div>
-                        </>
-                    ) : (
-                        <div className="auth-links">
-                            <Link to="/login">Login</Link>
-                            <Link to="/register" className="register-btn">Register</Link>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </nav>
         </header>

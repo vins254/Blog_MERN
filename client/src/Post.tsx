@@ -18,19 +18,30 @@ interface PostProps {
 export default function Post({ _id, title, summary, cover, createdAt, author, category }: PostProps) {
     // Robust image URL handling
     const getImageUrl = (path: string) => {
-        if (!path) return '';
-        // Handle potential absolute URLs or base64 (though unlikely here)
+        if (!path) return 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1000&auto=format&fit=crop';
+        
+        // Handle potential absolute URLs or base64
         if (path.startsWith('http') || path.startsWith('data:')) return path;
         
         const cleanPath = path.replace(/^\/+/, "");
-        return `${API_URL}/uploads/${cleanPath}`;
+        // If it looks like a filename (no slashes), assume it's in /uploads/
+        if (!cleanPath.includes('/')) {
+            return `${API_URL}/uploads/${cleanPath}`;
+        }
+        return `${API_URL}/${cleanPath}`;
     };
 
     return (
         <div className="post">
             <div className="image">
                 <Link to={`/post/${_id}`}>
-                    <img src={getImageUrl(cover)} alt={title} />
+                    <img 
+                        src={getImageUrl(cover)} 
+                        alt={title} 
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1000&auto=format&fit=crop';
+                        }}
+                    />
                 </Link>
             </div>
             <div className="texts">

@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { API_URL } from "../config";
 
 /**
@@ -132,6 +132,9 @@ export default function RegisterPage() {
             </div>
             
             <button type="submit">Sign Up</button>
+            <div className="auth-switch">
+                Already have an account? <Link to="/login">Login here</Link>
+            </div>
         </form>
     );
 }
