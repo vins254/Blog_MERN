@@ -74,6 +74,12 @@ The application follows a standard Full-Stack MERN architecture:
 -   **Auth Switch Links**: Added "Login" links on Register and vice-versa.
 -   **Responsive Nav**: Built a dedicated mobile slide-out menu with flat links for easier accessibility.
 
+### Phase 4: Tailwind CSS Migration (Utility-First)
+-   **Architecture**: Replaced the monolith `App.css` file with a **Tailwind CSS** configuration.
+-   **Design Tokens**: Extended the Tailwind theme with custom "Paper & Ink" colors, "Lora/Inter" typography, and custom shadows.
+-   **Code Quality**: Migrated all React components to use functional utility classes, reducing the overall CSS bundle size and improving maintainability.
+-   **Dark Mode**: Integrated Tailwind's `dark:` variant with the existing theme toggler via the `document.documentElement` class list.
+
 ---
 
 ## 🧪 Testing & Seeding
