@@ -1,8 +1,17 @@
 /**
- * Post Controller
- * Manages blog post operations including creation, deletion, retrieval, and file management.
+ * FILE: api/controllers/postController.ts
+ * PURPOSE: Manages the lifecycle of blog posts (CRUD) and handles file uploads.
+ * 
+ * HOW IT WORKS:
+ * 1. File Handling: Uses Multer to receive images, renames them with their original 
+ *    extension, and stores only the final filename in the database.
+ * 2. Ownership: For 'update' and 'delete' operations, it compares the current user's 
+ *    ID with the post author's ID to prevent unauthorized changes.
+ * 3. Populating: When fetching posts, it 'populates' the author field to include the 
+ *    creator's username rather than just an ID.
+ * 4. Cleanup: When a post is deleted, it automatically deletes the corresponding 
+ *    image file from the '/uploads' folder.
  */
-
 import { Response } from 'express';
 import Post from '../models/Post.js';
 import fs from 'fs';

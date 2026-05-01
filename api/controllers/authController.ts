@@ -1,8 +1,16 @@
 /**
- * Authentication Controller
- * Manages user lifecycle operations including registration, login, and session management.
+ * FILE: api/controllers/authController.ts
+ * PURPOSE: Manages user authentication, including registration, login, profile retrieval, and logout.
+ * 
+ * HOW IT WORKS:
+ * 1. Registration: Validates inputs, checks password strength, hashes passwords using bcrypt, 
+ *    and saves the user to MongoDB.
+ * 2. Login: Verifies credentials, generates a JSON Web Token (JWT), and sends it to the 
+ *    client via a secure, HttpOnly cookie.
+ * 3. Session Management: The 'profile' endpoint extracts the JWT from cookies to 
+ *    re-authenticate users on page reload.
+ * 4. Security: Uses salted hashing for passwords and secure cookie flags for tokens.
  */
-
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';

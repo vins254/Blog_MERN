@@ -4,25 +4,27 @@
 ![Tech Stack](https://img.shields.io/badge/Stack-MERN-blue?style=for-the-badge)
 ![TypeScript](https://img.shields.io/badge/Language-TypeScript-blue?logo=typescript&logoColor=white&style=for-the-badge)
 
-A high-performance, responsive full-stack blogging platform built with a modern TypeScript architecture. This project features a premium editorial design optimized for readability and professional content management.
+A high-performance, responsive full-stack blogging platform built with a modern TypeScript architecture. This project features a premium editorial design inspired by platforms like Medium and Ghost, optimized for readability and professional content management.
 
 > [!TIP]
 > ### 🚀 Quick Access (Demo Credentials)
 > Explore the platform immediately without registration:
 > - **Username:** `demo`
 > - **Password:** `demo123`
+>
+> To initialize these credentials in your own database, run: `npm run seed`
 
 ---
 
 ## ✨ Key Features
 
-- **Editorial UI/UX**: typography-first design using custom CSS variables (HSL) and modern flex/grid layouts.
+- **Premium 2-Column Card Grid**: A human-centric design that organizes posts into a clean, modern grid that adapts perfectly to any screen size.
+- **Editorial UI/UX**: typography-first design using the **Lora serif font** for headlines and **Inter** for body text.
 - **Dynamic Content**: Full CRUD operations for blog posts with category tagging.
 - **Rich Text Editing**: Integrated **React-Quill** for beautiful article formatting.
+- **Responsive Navigation**: A smart 'hamburger' menu for mobile that presents flat, accessible links for all account actions.
+- **Smart Asset Handling**: Posts without images gracefully hide their media containers, maintaining a polished look.
 - **Robust Auth**: JWT-based authentication with secure HttpOnly cookies and centralized profile management.
-- **Smart Logic**: Ownership-based controls (Delete/Edit buttons only appear for the original author).
-- **Responsive & Accessible**: Fully optimized for mobile, tablet, and desktop viewports.
-- **Full-Stack Search**: Real-time filtering by title, summary, or category.
 
 ---
 
@@ -31,14 +33,15 @@ A high-performance, responsive full-stack blogging platform built with a modern 
 ### Frontend (Client)
 - **Framework**: React 18 with TypeScript.
 - **State Management**: Centralized `UserContext` for session persistence.
-- **Styling**: Vanilla CSS with a custom design system for maximum performance.
-- **Navigation**: React Router 6.
+- **Styling**: Vanilla CSS with a custom "Paper & Ink" design system.
+- **Navigation**: React Router 6 with isolated Auth pages for a distraction-free experience.
 
 ### Backend (API)
 - **Server**: Node.js & Express.
 - **Database**: MongoDB Atlas with Mongoose modeling.
+- **Seeding**: Includes a `seed.ts` utility to quickly initialize demo accounts.
 - **Security**: Bcrypt.js for hashing, JWT for tokenized sessions.
-- **File System**: Multer for high-performance image uploads and storage.
+- **File System**: Multer for high-performance image uploads and automated cleanup on deletion.
 
 ---
 
@@ -46,47 +49,31 @@ A high-performance, responsive full-stack blogging platform built with a modern 
 
 ### 1. Prerequisites
 - **Node.js** (v18+)
-- **NPM** or **Yarn**
-- **MongoDB Atlas** connection string
+- **MongoDB Atlas** account (Ensure your IP is whitelisted: use `0.0.0.0/0` for cloud deployments).
 
-### 2. Environment Setup
-Create a `.env` file in the `/api` directory:
-```env
-MONGO_URL=your_mongodb_uri
-JWT_SECRET=your_random_secret_string
-CLIENT_URL=http://localhost:3000
-PORT=4000
-```
-
-### 3. Installation & Running
+### 2. Installation & Running
 ```bash
-# Install root/backend dependencies
+# 1. Clone and Install dependencies
 npm install
 
-# Install client dependencies
-cd client && npm install
+# 2. Seed the database (Initializes the demo account)
+npm run seed
 
-# Start both services (Local Dev)
-# Run root terminal
+# 3. Start the application
+# Start Backend
 npm run dev
-# Run client terminal
-npm start
+
+# Start Frontend (in a new terminal)
+cd client && npm start
 ```
 
 ---
 
-## 🌐 Deployment Instructions
+## 🌐 Deployment & Stability Fixes
 
-### Backend (Render / Heroku)
-- **Root Directory**: `api` (or project root if using monorepo style).
-- **Build Command**: `npm install`
-- **Start Command**: `node index.js` (Note: In production, compile TS or use `tsx`).
-- **Critical**: Set `CLIENT_URL` to your production frontend URL and bind host to `0.0.0.0`.
-
-### Frontend (Vercel / Netlify)
-- **Root Directory**: `client`
-- **Environment**: Set `REACT_APP_API_URL` to your production backend URL.
-- **Framework**: Create React App.
+- **MongoDB Timeout**: The backend is configured to "Fail-Fast" if it cannot reach Atlas within 5 seconds, preventing long server hangs on Render.
+- **CORS & Cookies**: Pre-configured for cross-site cookie support (`SameSite: None`, `Secure: True`) to ensure authentication works seamlessly in production environments.
+- **Error Handling**: Standardized JSON error responses across all endpoints.
 
 ---
 

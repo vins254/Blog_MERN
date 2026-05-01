@@ -1,3 +1,14 @@
+/**
+ * FILE: client/src/App.tsx
+ * PURPOSE: The root component that defines the application structure and routing.
+ * 
+ * HOW IT WORKS:
+ * 1. State Management: Wraps everything in UserContextProvider to provide user session 
+ *    and theme data globally.
+ * 2. Routing: Uses React Router to map URLs to specific page components.
+ * 3. Layouts: Separates 'public' content (Layout) from 'auth' content (Login/Register). 
+ *    This allows auth pages to have a cleaner, distraction-free UI without the header.
+ */
 import React from 'react';
 import './App.css';
 import Layout from "./Layout";
@@ -11,11 +22,6 @@ import PostPage from "./pages/PostPage";
 import EditPost from './pages/EditPost';
 import UserPostsPage from "./pages/UserPostsPage";
 
-/**
- * Main Application Component
- * Handles client-side routing and global context initialization.
- * All pages are wrapped in UserContextProvider for global state management.
- */
 function App() {
   return (
     <UserContextProvider>

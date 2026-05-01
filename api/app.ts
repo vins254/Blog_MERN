@@ -1,3 +1,17 @@
+/**
+ * FILE: api/app.ts
+ * PURPOSE: The main configuration and entry point for the Express backend server.
+ * 
+ * HOW IT WORKS:
+ * 1. Environment Setup: Imports necessary modules (express, mongoose, cors, etc.).
+ * 2. Middleware: Configures CORS (Cross-Origin Resource Sharing) to allow communication 
+ *    with the frontend, parses JSON bodies, and enables cookie handling for JWT.
+ * 3. Static Files: Mounts the '/uploads' directory to serve images uploaded by users.
+ * 4. Database: Establishes a connection to MongoDB Atlas with a 5s timeout to prevent hanging.
+ * 5. Routing: Integrates authentication and post-related routes.
+ * 6. Error Handling: Implements a global error middleware to catch and standardize 
+ *    all server-side errors, ensuring the frontend always receives a JSON response.
+ */
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';

@@ -1,3 +1,17 @@
+/**
+ * FILE: client/src/Header.tsx
+ * PURPOSE: The global navigation bar for the application.
+ * 
+ * HOW IT WORKS:
+ * 1. Responsive Design: Uses a 'hamburger' menu on small screens and a traditional 
+ *    dropdown on desktops to manage user accounts.
+ * 2. Search Integration: Provides a real-time search input that updates the 
+ *    global search query via UserContext.
+ * 3. Theme Toggle: Allows users to switch between light and dark modes, persisting 
+ *    the choice in the application state.
+ * 4. Conditional Rendering: Shows different links (Login/Register vs My Blogs/Create) 
+ *    depending on whether the user is authenticated.
+ */
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
@@ -12,13 +26,14 @@ export default function Header() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Close dropdown when clicking outside
+    // Close dropdown when clicking outside to ensure a clean UI
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
+            // Check if the click was outside the desktop profile dropdown
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setIsDropdownOpen(false);
             }
-            // Close mobile nav if clicking outside it and outside the hamburger
+            // Logic for mobile: Close mobile nav if clicking outside it and outside the hamburger button
             if (
                 navRef.current &&
                 !navRef.current.contains(event.target as Node) &&
