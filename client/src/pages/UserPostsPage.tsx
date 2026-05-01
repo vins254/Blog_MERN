@@ -50,7 +50,7 @@ export default function UserPostsPage() {
                     ))}
                 </div>
             ) : (
-                <div className="text-center text-ink-faint py-15 text-base">
+                <div className="text-center text-ink-faint py-16 text-base">
                     {isOwner ? "You haven't created any posts yet." : "This user has no posts."}
                 </div>
             )}

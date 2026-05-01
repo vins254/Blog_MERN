@@ -63,7 +63,7 @@ export default function IndexPage() {
                     ))}
                 </div>
             ) : (
-                <div className="text-center text-ink-faint py-15 text-base">
+                <div className="text-center text-ink-faint py-16 text-base">
                     {searchQuery ? `No posts found matching "${searchQuery}"` : "No posts available at the moment."}
                 </div>
             )}
