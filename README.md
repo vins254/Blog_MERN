@@ -33,7 +33,7 @@ A high-performance, responsive full-stack blogging platform built with a modern 
 ### Frontend (Client)
 - **Framework**: React 18 with TypeScript.
 - **State Management**: Centralized `UserContext` for session persistence.
-- **Styling**: Vanilla CSS with a custom "Paper & Ink" design system.
+- **Styling**: **Tailwind CSS** with a custom "Paper & Ink" design system (extended tokens for fonts, colors, and shadows).
 - **Navigation**: React Router 6 with isolated Auth pages for a distraction-free experience.
 
 ### Backend (API)
