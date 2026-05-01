@@ -56,18 +56,13 @@ export default function PostPage() {
      * Normalizes image paths to absolute URLs.
      */
     const getImageUrl = (path: string) => {
-        if (!path) return 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1000&auto=format&fit=crop';
-        
-        // Handle potential absolute URLs or base64
+        if (!path) return null;
         if (path.startsWith('http') || path.startsWith('data:')) return path;
-        
-        const cleanPath = path.replace(/^\/+/, "");
-        // If it looks like a filename (no slashes), assume it's in /uploads/
-        if (!cleanPath.includes('/')) {
-            return `${API_URL}/uploads/${cleanPath}`;
-        }
-        return `${API_URL}/${cleanPath}`;
+        const cleanPath = path.replace(/^\/+/, '');
+        return `${API_URL}/uploads/${cleanPath}`;
     };
+
+    const imageUrl = getImageUrl(postInfo.cover);
 
     // Check if the current logged-in user is the author of this post
     // We check both .id and ._id for robustness across different API response formats
@@ -112,15 +107,18 @@ export default function PostPage() {
                 </div>
             )}
 
-            <div className="post-banner">
-                <img 
-                    src={getImageUrl(postInfo.cover)} 
-                    alt={postInfo.title} 
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1000&auto=format&fit=crop';
-                    }}
-                />
-            </div>
+            {imageUrl && (
+                <div className="post-banner">
+                    <img
+                        src={imageUrl}
+                        alt={postInfo.title}
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).parentElement!.style.display = 'none';
+                        }}
+                    />
+                </div>
+            )}
             
             <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.content }} />
         </div>
