@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
   @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
@@ -18,9 +17,4 @@
   [data-theme='dark'] body {
     @apply bg-paper text-ink;
   }
-}
-
-@layer components {
-  /* We can keep some core component classes here using @apply to make the transition smoother 
-     if we want to avoid changing 1000 class names at once, but the goal is utility classes. */
 }
