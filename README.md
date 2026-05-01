@@ -6,6 +6,12 @@
 
 A high-performance, responsive full-stack blogging platform built with a modern TypeScript architecture. This project features a premium editorial design optimized for readability and professional content management.
 
+> [!TIP]
+> ### 🚀 Quick Access (Demo Credentials)
+> Explore the platform immediately without registration:
+> - **Username:** `demo`
+> - **Password:** `demo123`
+
 ---
 
 ## ✨ Key Features

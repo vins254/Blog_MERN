@@ -60,25 +60,6 @@ export default function LoginPage() {
             <div className="auth-switch">
                 Don't have an account? <Link to="/register">Sign up here</Link>
             </div>
-
-            <div className="demo-credentials">
-                <h3>Try with Demo Account</h3>
-                <p>Use these credentials to explore the platform without creating an account:</p>
-                <div className="demo-box">
-                    <div><strong>Username:</strong> demo</div>
-                    <div><strong>Password:</strong> demo123</div>
-                </div>
-                <button 
-                    type="button" 
-                    className="demo-btn" 
-                    onClick={() => {
-                        setUsername('demo');
-                        setPassword('demo123');
-                    }}
-                >
-                    Fill Demo Credentials
-                </button>
-            </div>
         </form>
     );
 }
