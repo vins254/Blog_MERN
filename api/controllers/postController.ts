@@ -18,26 +18,35 @@ import fs from 'fs';
 import path from 'path';
 import { AuthRequest } from '../middleware/authMiddleware.js';
 import { fileURLToPath } from 'url';
+import { v2 as cloudinary } from 'cloudinary';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const UPLOADS_PATH = path.join(__dirname, '..', 'uploads');
 
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME as string,
+    api_key: process.env.CLOUDINARY_API_KEY as string,
+    api_secret: process.env.CLOUDINARY_API_SECRET as string,
+});
+
 /**
  * Creates a new blog post.
- * Handles image file renaming (adding extension) and stores metadata in MongoDB.
+ * Uploads cover image to Cloudinary and stores the secure URL in MongoDB.
  */
 export const createPost = async (req: AuthRequest, res: Response) => {
     try {
-        let newPath: string | null = null;
+        let imageUrl: string | undefined = undefined;
         if (req.file) {
-            // Process the uploaded image file
-            const { originalname, path: tempPath } = req.file;
-            const parts = originalname.split('.');
-            const ext = parts[parts.length - 1];
-            newPath = tempPath + '.' + ext;
-            fs.renameSync(tempPath, newPath); // Add the file extension
-            newPath = path.basename(newPath); // Store only the filename in the DB
+            // Upload the file to Cloudinary
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'blog_posts',
+            });
+            imageUrl = result.secure_url;
+            
+            // Clean up the temporary file from the 'uploads' folder
+            fs.unlinkSync(req.file.path);
         }
 
         const { title, summary, content, category } = req.body;
@@ -46,13 +55,13 @@ export const createPost = async (req: AuthRequest, res: Response) => {
             summary,
             content,
             category: category || 'Other',
-            cover: newPath,
-            author: req.user?.id, // Associate post with the logged-in user
+            cover: imageUrl,
+            author: req.user?.id,
         });
         res.json(postDoc);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
+        console.error('Create Post Error:', error);
+        res.status(500).json({ message: "Server error during post creation" });
     }
 };
 
@@ -62,23 +71,25 @@ export const createPost = async (req: AuthRequest, res: Response) => {
  */
 export const updatePost = async (req: AuthRequest, res: Response) => {
     try {
-        let newPath: string | null = null;
+        let imageUrl: string | undefined = undefined;
         if (req.file) {
-            const { originalname, path: tempPath } = req.file;
-            const parts = originalname.split('.');
-            const ext = parts[parts.length - 1];
-            newPath = tempPath + '.' + ext;
-            fs.renameSync(tempPath, newPath);
-            newPath = path.basename(newPath);
+            // Upload new image to Cloudinary
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'blog_posts',
+            });
+            imageUrl = result.secure_url;
+            
+            // Clean up temporary local file
+            fs.unlinkSync(req.file.path);
         }
 
         const { id, title, summary, content, category } = req.body;
-        const postDoc: any = await Post.findById(id);
+        const postDoc = await Post.findById(id);
         if (!postDoc) {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        // Ownership Check: Ensure stringified IDs match
+        // Ownership Check
         const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user?.id);
         if (!isAuthor) {
             return res.status(403).json({ message: 'You are not the author of this post' });
@@ -89,15 +100,15 @@ export const updatePost = async (req: AuthRequest, res: Response) => {
         postDoc.summary = summary;
         postDoc.content = content;
         postDoc.category = category || 'Other';
-        if (newPath) {
-            postDoc.cover = newPath;
+        if (imageUrl) {
+            postDoc.cover = imageUrl;
         }
 
         await postDoc.save();
         res.json(postDoc);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        console.error('Update Post Error:', error);
+        res.status(500).json({ message: 'Server error during post update' });
     }
 };
 
@@ -135,7 +146,7 @@ export const getPost = async (req: AuthRequest, res: Response) => {
 export const deletePost = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     try {
-        const postDoc: any = await Post.findById(id);
+        const postDoc = await Post.findById(id);
         if (!postDoc) return res.status(404).json({ message: 'Post not found' });
 
         // Security check: Only the author can delete their post
@@ -144,8 +155,8 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
             return res.status(403).json({ message: 'You are not the author of this post' });
         }
 
-        // Clean up linked asset if it exists
-        if (postDoc.cover) {
+        // Clean up linked asset if it's a local file (legacy)
+        if (postDoc.cover && !postDoc.cover.startsWith('http')) {
             const coverPath = path.join(UPLOADS_PATH, postDoc.cover);
             if (fs.existsSync(coverPath)) {
                 fs.unlinkSync(coverPath);
