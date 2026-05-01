@@ -7,21 +7,21 @@ module.exports = {
     extend: {
       colors: {
         ink: {
-          DEFAULT: '#1a1814',
-          light: '#5c5750',
-          faint: '#9c958c',
+          DEFAULT: 'var(--ink)',
+          light: 'var(--ink-light)',
+          faint: 'var(--ink-faint)',
         },
         paper: {
-          DEFAULT: '#faf8f3',
-          warm: '#f5f2eb',
+          DEFAULT: 'var(--paper)',
+          warm: 'var(--paper-warm)',
         },
         accent: {
           DEFAULT: '#c0392b',
           teal: '#2c7a7b',
         },
-        surface: '#ffffff',
-        'border-custom': '#e5e0d5',
-        'border-dark': '#cec9be',
+        surface: 'var(--surface)',
+        'border-custom': 'var(--border)',
+        'border-dark': 'var(--border-dark)',
       },
       fontFamily: {
         serif: ['Lora', 'Georgia', 'serif'],
